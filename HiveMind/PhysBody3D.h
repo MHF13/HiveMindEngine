@@ -2,7 +2,6 @@
 #define __PhysBody3D_H__
 
 #include "p2List.h"
-#include "Bullet/include/LinearMath/btVector3.h"
 #include "glmath.h"
 
 class btRigidBody;
@@ -11,7 +10,7 @@ class Module;
 // =================================================
 struct PhysBody3D
 {
-	friend class ModulePhysics3D;
+
 public:
 	PhysBody3D(btRigidBody* body);
 	~PhysBody3D();
@@ -20,7 +19,6 @@ public:
 	void GetTransform(float* matrix) const;
 	void SetTransform(const float* matrix) const;
 	void SetPos(float x, float y, float z);
-	void SetPos(const btVector3& vecPos);
 	void SetPos(vec3& vecPos);
 	void SetAsSensor(bool is_sensor);
 	bool GetIsSensor() { return isSensor; }
