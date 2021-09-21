@@ -61,6 +61,9 @@ bool Application::Init()
 	}
 	
 	ms_timer.Start();
+
+	
+
 	return ret;
 }
 

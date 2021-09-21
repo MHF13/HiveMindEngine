@@ -6,6 +6,12 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
+
+#include "GUI/imgui.h"
+#include "GUI/backends/imgui_impl_sdl.h"
+#include "GUI/backends/imgui_impl_opengl2.h"
+
+
 enum main_states
 {
 	MAIN_CREATION,
