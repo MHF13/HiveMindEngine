@@ -7,7 +7,7 @@
 #include "GUI/backends/imgui_impl_opengl3.h"
 #include "SDL\include\SDL_opengl.h"
 
-#include <chrono>
+
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -76,8 +76,32 @@ update_status ModuleEditor::Update(float dt)
 
     ImGui::End();
 
+    ImGui::BeginMainMenuBar();
 
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    if (ImGui::BeginMenu("Help"))
+    {
+        if (ImGui::MenuItem("GUI Demo"))
+        {
+            //showcase = !showcase;
+        }
+        if (ImGui::MenuItem("Documentation"))
+        {
+
+        }
+        if (ImGui::MenuItem("GUI Demo"))
+        {
+
+        }
+        if (ImGui::MenuItem("GUI Demo"))
+        {
+
+        }
+
+        ImGui::EndMenu();
+    }
+    ImGui::EndMainMenuBar();
+
+    //ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
