@@ -20,6 +20,7 @@ private:
 	void RecolVector(std::vector<float>* vec, int size, float* push, float dt, int flag);
 
 	bool showGuiDemo = false;
+	bool showFPS = false;
 	bool showSmallExample = true;
 	bool closeWindow = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);

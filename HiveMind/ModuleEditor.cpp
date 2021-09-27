@@ -38,61 +38,50 @@ update_status ModuleEditor::Update(float dt)
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
-    //Exit 
-    ImGui::Begin("Exit");                          // Create a window called "Hello, world!" and append into it.
-
-    ImGui::Text("Press to close");               // Display some text (you can use a format strings too)
-    if (ImGui::Button("Close"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-        return update_status::UPDATE_STOP;
-    ImGui::End();
-    
     //Config
-    ImGui::Begin("Configuration");                          // Create a window called "Hello, world!" and append into it.
-
-    ImGui::Text("Options");   
-    char title[25];
     
-	// log FPS
-
-    RecolVector(&fps_log, 32, App->GetLastFrameRate(), dt, 1);
-
-    sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size()-1]);
-    ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(),0,title, 0.0f,100.0f, ImVec2(310,100));
-    
-    RecolVector(&Milliseconds_log, 32, App->GetLastFrameRate(), dt, 2);
-    sprintf_s(title, 25, "Milliseconds %.1f", Milliseconds_log[Milliseconds_log.size() - 1]);
-    ImGui::PlotHistogram("##framerate", &Milliseconds_log[0], Milliseconds_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-
-    ImGui::End();
-
-    //Demo
-    ImGui::Begin("Demo Window");   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-    ImGui::Text("Click to open the demostration window");
-    ImGui::Checkbox("Demo Window", &showGuiDemo);
 
     if (showGuiDemo) ImGui::ShowDemoWindow(&showGuiDemo);
+    if (showFPS)
+    {
+        ImGui::Begin("Configuration", &showFPS);                          // Create a window called "Hello, world!" and append into it.
 
-    ImGui::End();
+        ImGui::Text("Options");
+        char title[25];
 
+        // log FPS
+
+        RecolVector(&fps_log, 32, App->GetLastFrameRate(), dt, 1);
+
+        sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
+        ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+
+        RecolVector(&Milliseconds_log, 32, App->GetLastFrameRate(), dt, 2);
+        sprintf_s(title, 25, "Milliseconds %.1f", Milliseconds_log[Milliseconds_log.size() - 1]);
+        ImGui::PlotHistogram("##framerate", &Milliseconds_log[0], Milliseconds_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+
+        ImGui::End();
+    }
+ 
     ImGui::BeginMainMenuBar();
 
     if (ImGui::BeginMenu("Help"))
     {
         if (ImGui::MenuItem("GUI Demo"))
         {
-            //showcase = !showcase;
+            showGuiDemo = !showGuiDemo;
         }
-        if (ImGui::MenuItem("Documentation"))
+        if (ImGui::MenuItem("FPS and Millyseconds"))
         {
-
-        }
-        if (ImGui::MenuItem("GUI Demo"))
-        {
-
+            showFPS = !showFPS;
         }
         if (ImGui::MenuItem("GUI Demo"))
         {
-
+            
+        }
+        if (ImGui::MenuItem("Exit"))
+        {
+            return update_status::UPDATE_STOP;
         }
 
         ImGui::EndMenu();
