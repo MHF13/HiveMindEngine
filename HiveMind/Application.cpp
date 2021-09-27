@@ -62,9 +62,12 @@ bool Application::Init()
 		item = item->next;
 	}
 	
-	ms_timer.Start();
+	frameTime.Start();
 
-	
+	//---
+	cappedMs = 1000 / 60;
+	framerBlock = 60;
+	//---
 
 	return ret;
 }
@@ -72,13 +75,40 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
+	frameCount++;
+	lastSecFrameCount++;
+
+	//dt = (float)frameTime.Read() / 1000.0f;
+	dt = frameTime.ReadSec();
+	frameTime.Start();
+	FPS = SDL_GetTicks();
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	float tmpFPS = SDL_GetTicks() - FPS;
+
+	float secondsSinceStartup = startupTime.ReadSec();
+	framerate = frameCount / secondsSinceStartup;
+	timeFramesSecond += dt;
+	if (timeFramesSecond > 1.0f)
+	{
+		framesOnLastSecond = lastSecFrameCount;
+		lastSecFrameCount = 0;
+		timeFramesSecond = 0;
+	}
+
+	oldLastFrame = lastFrameMs;
+	lastFrameMs = lastSecFrameTime.Read();
+	lastSecFrameTime.Start();
+
+	if (cappedMs > tmpFPS)
+	{
+		// Use SDL_Delay to make sure you get your capped framerate
+		SDL_Delay(cappedMs - tmpFPS);
+	}
+	//LOG("frame Rate: %f", framesOnLastSecond);
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules

@@ -16,6 +16,9 @@ public:
 
 
 private:
+
+	void RecolVector(std::vector<float> *vec);
+
 	bool showGuiDemo = false;
 	bool showSmallExample = true;
 	bool closeWindow = false;
@@ -23,6 +26,4 @@ private:
 
 	std::vector<float> fps_log;
 
-	std::chrono::steady_clock::time_point end;
-	std::chrono::steady_clock::time_point begin;
 };

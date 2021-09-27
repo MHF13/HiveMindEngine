@@ -38,7 +38,6 @@ update_status ModuleEditor::Update(float dt)
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
-    end = std::chrono::steady_clock::now();
     //Exit 
     ImGui::Begin("Exit");                          // Create a window called "Hello, world!" and append into it.
 
@@ -53,7 +52,16 @@ update_status ModuleEditor::Update(float dt)
     ImGui::Text("Options");   
     char title[25];
     
-   // float fps = end - begin;
+	// log FPS
+	if (fps_log.size()<=32){
+		fps_log.push_back(*App->GetLastFrameRate());
+	}
+	else
+	{
+		//RecolVector(&fps_log);
+		fps_log.erase(fps_log.begin());
+		fps_log.push_back(*App->GetLastFrameRate());
+	}
 
     sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size()-1]);
     ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(),0,title, 0.0f,100.0f, ImVec2(310,100));
@@ -75,12 +83,16 @@ update_status ModuleEditor::Update(float dt)
     glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-
-    begin = std::chrono::steady_clock::now();
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleEditor::CleanUp()
 {
 	return true;
+}
+
+void ModuleEditor::RecolVector(std::vector<float> *vec)
+{
+	vec->erase(vec->begin());
+
 }

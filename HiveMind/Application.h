@@ -25,8 +25,25 @@ public:
 
 private:
 
-	Timer	ms_timer;
-	float	dt;
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastSecFrameTime;
+
+	uint lastSecFrameCount = 0;
+	uint prevLastSecFrameCount = 0;
+	float framesOnLastSecond = 0;
+	uint lastFrameMs = 0;
+
+	float dt = 0.0f;
+	float framerate;
+	float framerBlock;
+	float perfTime;
+	float oldLastFrame = 0.0f;
+	float timeFramesSecond = 0.0f;
+	float cappedMs = -1;
+
+	float FPS = 0;
+
 	p2List<Module*> list_modules;
 
 public:
@@ -40,11 +57,17 @@ public:
 
 	bool GetDebugMode() { return debug; };
 	void SetDebugMode() { debug = !debug; };
+
+	float* GetLastFrameRate() { return &framesOnLastSecond; };
 private:
 
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+
+
+	uint frames = 0;
+	int frameCount = 0;
 
 	bool debug = false;
 };
