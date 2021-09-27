@@ -93,6 +93,9 @@
     <ClInclude Include="GUI\imstb_truetype.h">
       <Filter>Sources\Tools\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleEditor.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="GUI\backends\imgui_impl_sdl.cpp">
       <Filter>Sources\Tools\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleEditor.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
