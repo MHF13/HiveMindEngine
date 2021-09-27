@@ -50,13 +50,11 @@ update_status ModuleEditor::Update(float dt)
         char title[25];
 
         // log FPS
-
-        RecolVector(&fps_log, 32, App->GetLastFrameRate(), dt, 1);
-
+		RecolVector(&fps_log, 32, App->GetLastFrameRate());
         sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
         ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 
-        RecolVector(&Milliseconds_log, 32, App->GetLastFrameRate(), dt, 2);
+		RecolVector(&Milliseconds_log, 32, &dt, 1000);
         sprintf_s(title, 25, "Milliseconds %.1f", Milliseconds_log[Milliseconds_log.size() - 1]);
         ImGui::PlotHistogram("##framerate", &Milliseconds_log[0], Milliseconds_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 
@@ -102,27 +100,21 @@ bool ModuleEditor::CleanUp()
 	return true;
 }
 
-void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float *push, float dt, int flag)
+void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float* push)
 {
-    if (flag == 1)
-    {
-        if (vec->size() <= size)
-            vec->push_back(*push);
-        else 
-        {
-            vec->erase(vec->begin());
-            vec->push_back(*push);
-        }
-
-    }
-    else if (flag == 2)
-    {
-        if (vec->size() <= size)
-            vec->push_back(dt * 1000);
-        else
-        {
-            vec->erase(vec->begin());
-            vec->push_back(dt * 1000);
-        }
-    }
+	if (vec->size() <= size)
+		vec->push_back(*push);
+	else {
+		vec->erase(vec->begin());
+		vec->push_back(*push);
+	}
+}
+void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float* push, int toMultiply)
+{
+	if (vec->size() <= size)
+		vec->push_back((*push) * toMultiply);
+	else {
+		vec->erase(vec->begin());
+		vec->push_back((*push) * toMultiply);
+	}
 }

@@ -17,7 +17,8 @@ public:
 
 private:
 
-	void RecolVector(std::vector<float>* vec, int size, float* push, float dt, int flag);
+	void RecolVector(std::vector<float>* vec, int size, float* push);
+	void RecolVector(std::vector<float>* vec, int size, float* push, int toMultiply);
 
 	bool showGuiDemo = false;
 	bool showFPS = false;
