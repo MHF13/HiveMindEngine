@@ -53,18 +53,16 @@ update_status ModuleEditor::Update(float dt)
     char title[25];
     
 	// log FPS
-	if (fps_log.size()<=32){
-		fps_log.push_back(*App->GetLastFrameRate());
-	}
-	else
-	{
-		//RecolVector(&fps_log);
-		fps_log.erase(fps_log.begin());
-		fps_log.push_back(*App->GetLastFrameRate());
-	}
+
+    RecolVector(&fps_log, 32, App->GetLastFrameRate(), dt, 1);
 
     sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size()-1]);
     ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(),0,title, 0.0f,100.0f, ImVec2(310,100));
+    
+    RecolVector(&Milliseconds_log, 32, App->GetLastFrameRate(), dt, 2);
+    sprintf_s(title, 25, "Milliseconds %.1f", Milliseconds_log[Milliseconds_log.size() - 1]);
+    ImGui::PlotHistogram("##framerate", &Milliseconds_log[0], Milliseconds_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+
     ImGui::End();
 
     //Demo
@@ -101,7 +99,7 @@ update_status ModuleEditor::Update(float dt)
     }
     ImGui::EndMainMenuBar();
 
-    //ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
@@ -115,8 +113,27 @@ bool ModuleEditor::CleanUp()
 	return true;
 }
 
-void ModuleEditor::RecolVector(std::vector<float> *vec)
+void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float *push, float dt, int flag)
 {
-	vec->erase(vec->begin());
+    if (flag == 1)
+    {
+        if (vec->size() <= size)
+            vec->push_back(*push);
+        else 
+        {
+            vec->erase(vec->begin());
+            vec->push_back(*push);
+        }
 
+    }
+    else if (flag == 2)
+    {
+        if (vec->size() <= size)
+            vec->push_back(dt * 1000);
+        else
+        {
+            vec->erase(vec->begin());
+            vec->push_back(dt * 1000);
+        }
+    }
 }

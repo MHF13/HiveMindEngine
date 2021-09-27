@@ -17,7 +17,7 @@ public:
 
 private:
 
-	void RecolVector(std::vector<float> *vec);
+	void RecolVector(std::vector<float>* vec, int size, float* push, float dt, int flag);
 
 	bool showGuiDemo = false;
 	bool showSmallExample = true;
@@ -25,5 +25,7 @@ private:
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	std::vector<float> fps_log;
+	std::vector<float> Milliseconds_log;
+	float* deltaTime;
 
 };
