@@ -74,6 +74,40 @@ update_status ModuleEditor::Update(float dt)
 
         }
         ImGui::End();
+
+        if (ImGui::CollapsingHeader("Window"))
+        {
+            if (ImGui::Checkbox("Active",&active))
+            {
+
+            }
+            ImGui::Text("Icon: *default*");
+
+            static int i1 = 0;
+            ImGui::SliderInt("Brightness", &i1, 0, 120);
+
+             static int i1 = 0;
+            ImGui::SliderInt("Width", &i1, 0, 120);
+
+             static int i1 = 0;
+            ImGui::SliderInt("Height", &i1, 0, 120);
+
+            if (ImGui::Checkbox("Fullscreen", &fullscreen))
+            {
+
+            }
+            ImGui::SameLine();
+
+            if (ImGui::Checkbox("Resizable", &resizable))
+            {
+
+            }
+            if(ImGui::IsItemHovered())
+
+            
+
+        }
+        ImGui::End();
     }
 
     ImGui::BeginMainMenuBar();
