@@ -25,21 +25,11 @@ public:
 
 private:
 
-	Timer startupTime;
-	Timer frameTime;
-	Timer lastSecFrameTime;
 
-	uint lastSecFrameCount = 0;
-	uint prevLastSecFrameCount = 0;
-	float framesOnLastSecond = 0;
-	uint lastFrameMs = 0;
+	Timer frameTime;
 
 	float dt = 0.0f;
 	float framerate;
-	float framerBlock;
-	float perfTime;
-	float oldLastFrame = 0.0f;
-	float timeFramesSecond = 0.0f;
 	float cappedMs = -1;
 
 	float FPS = 0;
@@ -47,6 +37,7 @@ private:
 	p2List<Module*> list_modules;
 
 public:
+	int framerBlock;
 
 	Application();
 	~Application();
@@ -55,10 +46,6 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	bool GetDebugMode() { return debug; };
-	void SetDebugMode() { debug = !debug; };
-
-	float* GetLastFrameRate() { return &framesOnLastSecond; };
 private:
 
 	void AddModule(Module* mod);
@@ -66,8 +53,5 @@ private:
 	void FinishUpdate();
 
 
-	uint frames = 0;
-	int frameCount = 0;
 
-	bool debug = false;
 };

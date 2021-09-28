@@ -17,7 +17,7 @@ public:
 
 private:
 
-	void RecolVector(std::vector<float>* vec, int size, float* push);
+	void RecolVector(std::vector<float>* vec, int size, float dt);
 	void RecolVector(std::vector<float>* vec, int size, float* push, int toMultiply);
 
 	bool showGuiDemo = false;
@@ -28,6 +28,5 @@ private:
 
 	std::vector<float> fps_log;
 	std::vector<float> Milliseconds_log;
-	float* deltaTime;
-
+	int columns;
 };

@@ -29,6 +29,8 @@ bool ModuleEditor::Start()
 	ImGui_ImplOpenGL3_Init();
 
     fps_log.push_back(0.f);
+    Milliseconds_log.push_back(0.f);
+	columns = 32;
 	return true;
 }
 
@@ -39,15 +41,14 @@ update_status ModuleEditor::Update(float dt)
     ImGui::NewFrame();
 
     //Config
-    
-
     if (showGuiDemo) ImGui::ShowDemoWindow(&showGuiDemo);
     if (showFPS)
     {
+		
         ImGui::Begin("Configuration", &showFPS);
 
         ImGui::Text("Options");
-        char title[25];
+        char title[50];
 
         // log FPS
         if (ImGui::CollapsingHeader("Application"))
@@ -58,13 +59,13 @@ update_status ModuleEditor::Update(float dt)
             static char str2[128] = "";
             ImGui::InputTextWithHint("Organization", "organization's name", str1, IM_ARRAYSIZE(str1));
 
-            static int i1 = 0;
-            ImGui::SliderInt("slider int", &i1, 0, 120);
 
-            ImGui::Text("Limit Framerate: %d", i1);
-            RecolVector(&fps_log, 32, App->GetLastFrameRate());
+            ImGui::SliderInt("Limit Framerate:", &App->framerBlock, 1, 144);
 
-            sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
+            //ImGui::Text("Limit Framerate: %d", FPS);
+			RecolVector(&fps_log, columns, dt);
+
+            sprintf_s(title, columns, "Framerate %.1f", fps_log[fps_log.size() - 1]);
             ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 
             RecolVector(&Milliseconds_log, 32, &dt, 1000);
@@ -74,7 +75,7 @@ update_status ModuleEditor::Update(float dt)
 
         }
         ImGui::End();
-
+		/*
         if (ImGui::CollapsingHeader("Window"))
         {
             if (ImGui::Checkbox("Active",&active))
@@ -108,6 +109,7 @@ update_status ModuleEditor::Update(float dt)
 
         }
         ImGui::End();
+		*/
     }
 
     ImGui::BeginMainMenuBar();
@@ -246,16 +248,17 @@ bool ModuleEditor::CleanUp()
 {
 	return true;
 }
-
-void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float* push)
+//for FPS
+void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float dt)
 {
 	if (vec->size() <= size)
-		vec->push_back(*push);
+		vec->push_back(1/dt);
 	else {
 		vec->erase(vec->begin());
-		vec->push_back(*push);
+		vec->push_back(1/dt);
 	}
 }
+//for Miliseconds
 void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float* push, int toMultiply)
 {
 	if (vec->size() <= size)

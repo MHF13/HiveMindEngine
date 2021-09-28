@@ -58,26 +58,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 	Position += newPos;
 	Reference += newPos;
-	
-	if (App->GetDebugMode())
-	{
-		if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)LOG("Position Player \n x: %f \n y: %f \t z: %f ", Position.x,Position.y, Position.z);
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)newPos.y += speed;
-		if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)newPos.y -= speed;
-		if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_REPEAT) newPos.y += speed;
-		if (App->input->GetKey(SDL_SCANCODE_KP_0) == KEY_REPEAT) newPos.y -= speed;
-
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
-
-
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
-
-
-		Position += newPos;
-		Reference += newPos;
-	}
 
 	// Mouse motion ----------------
 
