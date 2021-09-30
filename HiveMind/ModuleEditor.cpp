@@ -42,10 +42,10 @@ update_status ModuleEditor::Update(float dt)
 
     //Config
     if (showGuiDemo) ImGui::ShowDemoWindow(&showGuiDemo);
-    if (showFPS)
+    if (showConfig)
     {
 		
-        ImGui::Begin("Configuration", &showFPS);
+        ImGui::Begin("Configuration", &showConfig);
 
         ImGui::Text("Options");
         char title[50];
@@ -60,7 +60,9 @@ update_status ModuleEditor::Update(float dt)
             ImGui::InputTextWithHint("Organization", "organization's name", str1, IM_ARRAYSIZE(str1));
 
 
-            ImGui::SliderInt("Limit Framerate:", &App->framerBlock, 1, 144);
+            ImGui::SliderInt("Max FPS", &App->framerBlock, 1, 144);
+
+            ImGui::Text("Limit Framerate %d", App->framerBlock);
 
             //ImGui::Text("Limit Framerate: %d", FPS);
 			RecolVector(&fps_log, columns, dt);
@@ -74,42 +76,48 @@ update_status ModuleEditor::Update(float dt)
 
 
         }
-        ImGui::End();
-		/*
+       // ImGui::End();
+		
         if (ImGui::CollapsingHeader("Window"))
         {
-            if (ImGui::Checkbox("Active",&active))
+            if(ImGui::Checkbox("Active", &windowActive))
             {
-
+                App->window->width = 1080;
+                App->window->height = 720;
+                App->window->brightness = 1.0f;
+                App->window->SetWindowModification();
             }
-            ImGui::Text("Icon: *default*");
-
-            static int i1 = 0;
-            ImGui::SliderInt("Brightness", &i1, 0, 120);
-
-             static int i1 = 0;
-            ImGui::SliderInt("Width", &i1, 0, 120);
-
-             static int i1 = 0;
-            ImGui::SliderInt("Height", &i1, 0, 120);
-
-            if (ImGui::Checkbox("Fullscreen", &fullscreen))
+            if (windowActive)
             {
+                ImGui::Text("Icon: *default*");
 
+                ImGui::SliderFloat("Brightness", &App->window->brightness, 0.230f, 1.0f);
+
+                ImGui::SliderInt("Width", &App->window->width, 400, 1920);
+
+                ImGui::SliderInt("Height", &App->window->height, 300, 1080);
+
+                ImGui::Checkbox("Fullscreen", &App->window->fullScreen);
+                ImGui::SameLine();
+                ImGui::Checkbox("Resizable", &App->window->resizable);
+
+                ImGui::Checkbox("Borderless", &App->window->borderless);
+                ImGui::SameLine();
+                ImGui::Checkbox("FullDesktop", &App->window->fullDesktop);
+
+                if (ImGui::Button("Apply"))
+                {
+                    App->window->SetWindowModification();
+                }
+               // ImGui::Text("Refresh rate %d", SDLGetWindowRefreshRate());
             }
-            ImGui::SameLine();
-
-            if (ImGui::Checkbox("Resizable", &resizable))
-            {
-
-            }
-            if(ImGui::IsItemHovered())
+          
 
             
 
         }
         ImGui::End();
-		*/
+		
     }
 
     ImGui::BeginMainMenuBar();
@@ -217,7 +225,7 @@ update_status ModuleEditor::Update(float dt)
         if (ImGui::MenuItem("Paste", "CTRL+V")) {}
         ImGui::EndMenu();
     }
-    if (ImGui::BeginMenu("a"))
+    if (ImGui::BeginMenu("Options"))
     {
         if (ImGui::MenuItem("GUI Demo"))
         {
@@ -225,7 +233,7 @@ update_status ModuleEditor::Update(float dt)
         }
         if (ImGui::MenuItem("FPS and Millyseconds"))
         {
-            showFPS = !showFPS;
+            showConfig = !showConfig;
         }
         if (ImGui::MenuItem("GUI Demo"))
         {
