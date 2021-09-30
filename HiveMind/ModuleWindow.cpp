@@ -113,20 +113,11 @@ void ModuleWindow::SetWindowModification()
 {
 	SDL_SetWindowSize(window, width, height);
 	SDL_SetWindowBrightness(window, brightness);
+	SDL_SetWindowFullscreen(window, 0);
 
 	if (fullScreen)	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-	else if (!fullScreen)	SDL_SetWindowFullscreen(window, 0);
-
 	else if (resizable)	SDL_SetWindowFullscreen(window, SDL_WINDOW_RESIZABLE);
-	else if (!resizable)	SDL_SetWindowFullscreen(window, 0);
-
 	else if (borderless)	SDL_SetWindowFullscreen(window, SDL_WINDOW_BORDERLESS);
-	else if (!borderless)	SDL_SetWindowFullscreen(window, 0);
-
 	else if (fullDesktop)	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	else if (!fullDesktop)	SDL_SetWindowFullscreen(window, 0);
 
-
-		
-	
 }

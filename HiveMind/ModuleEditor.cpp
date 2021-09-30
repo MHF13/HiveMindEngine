@@ -97,13 +97,18 @@ update_status ModuleEditor::Update(float dt)
 
                 ImGui::SliderInt("Height", &App->window->height, 300, 1080);
 
-                ImGui::Checkbox("Fullscreen", &App->window->fullScreen);
-                ImGui::SameLine();
-                ImGui::Checkbox("Resizable", &App->window->resizable);
 
-                ImGui::Checkbox("Borderless", &App->window->borderless);
+				//
+				if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
+					App->window->resizable = App->window->borderless = App->window->fullDesktop = false;
                 ImGui::SameLine();
-                ImGui::Checkbox("FullDesktop", &App->window->fullDesktop);
+                if(ImGui::Checkbox("Resizable", &App->window->resizable))
+					App->window->fullScreen = App->window->borderless = App->window->fullDesktop = false;
+                if(ImGui::Checkbox("Borderless", &App->window->borderless))
+					App->window->fullScreen = App->window->resizable = App->window->fullDesktop = false;
+                ImGui::SameLine();
+                if(ImGui::Checkbox("FullDesktop", &App->window->fullDesktop))
+					App->window->fullScreen = App->window->resizable = App->window->borderless = false;
 
                 if (ImGui::Button("Apply"))
                 {
@@ -112,9 +117,6 @@ update_status ModuleEditor::Update(float dt)
                // ImGui::Text("Refresh rate %d", SDLGetWindowRefreshRate());
             }
           
-
-            
-
         }
         ImGui::End();
 		
