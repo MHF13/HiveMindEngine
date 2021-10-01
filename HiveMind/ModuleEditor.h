@@ -2,7 +2,6 @@
 #include "Module.h"
 #include <vector>
 
-
 class ModuleEditor : public Module
 {
 public:
@@ -31,5 +30,5 @@ private:
 	int columns;
 
 	///////////bools checkbox
-	bool windowActive = false;
+	bool windowActive = true;
 };

@@ -91,29 +91,27 @@ update_status ModuleEditor::Update(float dt)
             {
                 ImGui::Text("Icon: *default*");
 
-                ImGui::SliderFloat("Brightness", &App->window->brightness, 0.230f, 1.0f);
-
-                ImGui::SliderInt("Width", &App->window->width, 400, 1920);
-
-                ImGui::SliderInt("Height", &App->window->height, 300, 1080);
-
+                if(ImGui::SliderFloat("Brightness", &App->window->brightness, 0.230f, 1.0f))
+                    App->window->SetWindowModification();
+                if(ImGui::SliderInt("Width", &App->window->width, 400, 1920))
+                    App->window->SetWindowModification();
+                if(ImGui::SliderInt("Height", &App->window->height, 300, 1080))
+                    App->window->SetWindowModification();
 
 				//
 				if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
-					App->window->resizable = App->window->borderless = App->window->fullDesktop = false;
+					App->window->resizable = App->window->borderless = App->window->fullDesktop = false , App->window->SetWindowModification();
                 ImGui::SameLine();
                 if(ImGui::Checkbox("Resizable", &App->window->resizable))
-					App->window->fullScreen = App->window->borderless = App->window->fullDesktop = false;
+					App->window->fullScreen = App->window->borderless = App->window->fullDesktop = false , App->window->SetWindowModification();
                 if(ImGui::Checkbox("Borderless", &App->window->borderless))
-					App->window->fullScreen = App->window->resizable = App->window->fullDesktop = false;
+					App->window->fullScreen = App->window->resizable = App->window->fullDesktop = false, App->window->SetWindowModification();
                 ImGui::SameLine();
                 if(ImGui::Checkbox("FullDesktop", &App->window->fullDesktop))
-					App->window->fullScreen = App->window->resizable = App->window->borderless = false;
+					App->window->fullScreen = App->window->resizable = App->window->borderless = false , App->window->SetWindowModification();
 
-                if (ImGui::Button("Apply"))
-                {
-                    App->window->SetWindowModification();
-                }
+                //ImGui::Text("%s", glGetString(GL_VERSION));
+
                // ImGui::Text("Refresh rate %d", SDLGetWindowRefreshRate());
             }
           
