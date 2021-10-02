@@ -41,6 +41,7 @@ update_status ModuleEditor::Update(float dt)
     ImGui::NewFrame();
 
     //Config
+    
     if (showGuiDemo) ImGui::ShowDemoWindow(&showGuiDemo);
     if (showConfig)
     {
@@ -115,6 +116,52 @@ update_status ModuleEditor::Update(float dt)
                // ImGui::Text("Refresh rate %d", SDLGetWindowRefreshRate());
             }
           
+        }
+        if (ImGui::CollapsingHeader("Hardware"))
+        {
+            if (ImGui::Checkbox("Active", &hardwareActive))
+            {
+
+            }
+            if (hardwareActive)
+            {
+                SDL_version version;
+                SDL_GetVersion(&version);
+                ImGui::Text("SDL Version:");
+                ImGui::SameLine();
+                ImGui::TextColored({ 255,255,0,1 }, "%d.%d.%d", version.major, version.minor, version.patch);
+
+                ImGui::Separator();
+
+                ImGui::Text("CPUs: ");
+                ImGui::SameLine();
+                ImGui::TextColored({ 255,255,0,1 }, "%d (Cache: %d)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+
+                ImGui::Text("System RAM:");
+                ImGui::SameLine();
+                ImGui::TextColored({ 255,255,0,1 }, "%d", SDL_GetSystemRAM() / 1024);
+
+                ImGui::Text("Caps: ");
+                ImGui::SameLine();
+                ImGui::TextColored({ 255,255,0,1 }, "%d", SDL_GetSystemRAM() / 1024);
+
+                ImGui::Separator();
+                ImGui::Text("GPU :");
+                ImGui::SameLine();
+                ImGui::TextColored({ 255,255,0,1 }, "%s", glGetString(GL_RENDERER));
+
+                ImGui::Text("Brand :");
+                ImGui::SameLine();
+                ImGui::TextColored({ 255,255,0,1 }, "%s", glGetString(GL_RENDERER));
+                ImGui::Text("VRAM Budget :");
+                ImGui::SameLine();
+                // ImGui::TextColored({ 255,255,0,1 }, "%s", glGetString());
+
+            }
+
+
+
+
         }
         ImGui::End();
 		
@@ -246,7 +293,7 @@ update_status ModuleEditor::Update(float dt)
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+    //glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     return UPDATE_CONTINUE;

@@ -13,7 +13,6 @@ public:
 	bool CleanUp();
 
 
-
 private:
 
 	void RecolVector(std::vector<float>* vec, int size, float dt);
@@ -31,4 +30,5 @@ private:
 
 	///////////bools checkbox
 	bool windowActive = true;
+	bool hardwareActive = true;
 };
