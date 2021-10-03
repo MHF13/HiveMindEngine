@@ -4,6 +4,7 @@
 #include "ModuleRenderer3D.h"
 
 
+
 #include "GUI/backends/imgui_impl_opengl2.h"
 #include "SDL\include\SDL_opengl.h"
 
@@ -37,19 +38,7 @@ bool ModuleWindow::Init()
 		height = height * SCREEN_SIZE;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
-		//Use OpenGL 2.1
 		
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-	
-		SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
-		SDL_GL_SetSwapInterval(1); // Enable vsync
-
-
-
 		if(WIN_FULLSCREEN == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;

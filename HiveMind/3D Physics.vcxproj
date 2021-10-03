@@ -49,13 +49,15 @@
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)\MathGeoLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Github\HiveMindEngine\HiveMind\ExternalLib\Glew\include\GL;$(ProjectDir)\MathGeoLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalLibraryDirectories>E:\Github\HiveMindEngine\HiveMind\ExternalLib\Glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -81,6 +83,10 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ExternalLib\Glew\include\GL\eglew.h" />
+    <ClInclude Include="ExternalLib\Glew\include\GL\glew.h" />
+    <ClInclude Include="ExternalLib\Glew\include\GL\glxew.h" />
+    <ClInclude Include="ExternalLib\Glew\include\GL\wglew.h" />
     <ClInclude Include="ExternalLib\MathGeoLib\include\Algorithm\Random\LCG.h" />
     <ClInclude Include="ExternalLib\MathGeoLib\include\Geometry\AABB.h" />
     <ClInclude Include="ExternalLib\MathGeoLib\include\Geometry\AABB2D.h" />

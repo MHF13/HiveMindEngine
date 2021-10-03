@@ -28,6 +28,9 @@
     <Filter Include="Sources\ExternalLib\MathGeoLib">
       <UniqueIdentifier>{dc826f3b-3d60-4ad9-9380-ee4a8264a9a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Glew">
+      <UniqueIdentifier>{4ff89981-21f2-4a88-9467-bb4320b452d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -278,6 +281,18 @@
     </ClInclude>
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\Glew\include\GL\eglew.h">
+      <Filter>Sources\Tools\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\Glew\include\GL\glew.h">
+      <Filter>Sources\Tools\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\Glew\include\GL\glxew.h">
+      <Filter>Sources\Tools\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\Glew\include\GL\wglew.h">
+      <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
