@@ -1,5 +1,5 @@
 #include "Globals.h"
-#include "ExternalLib/Glew/include/GL/glew.h"
+#include "glew.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "SDL\include\SDL_opengl.h"
