@@ -61,7 +61,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n",  glewGetString(error));
+			LOG("Error initializing OpenGL! %s\n", glewGetString(error));
 			ret = false;
 		}
 
@@ -116,6 +116,20 @@ bool ModuleRenderer3D::Init()
 	// Projection matrix for
 	OnResize(App->window->width, App->window->height);
 
+	//OGL Vertex arrays
+
+	glGenBuffers(1, (GLuint*)&(my_id));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	vertices = { 0.0f,0.0f,0.0f,
+				1.0f, 0.0f, 0.0f,
+				0.0f,1.0f,0.0f,
+				1.0f, 0.0f, 0.0f,
+				1.0f,1.0f,0.0f,
+				0.0f,1.0f,0.0f};
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size() * 3, &vertices[0], GL_STATIC_DRAW);
+	
+
+
 	return ret;
 }
 
@@ -134,12 +148,21 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
+
+
+
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	// … bind and use other buffers
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	glDisableClientState(GL_VERTEX_ARRAY);
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }

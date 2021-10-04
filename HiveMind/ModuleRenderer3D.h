@@ -4,6 +4,7 @@
 #include "glmath.h"
 #include "Light.h"
 #include "ModuleWindow.h"
+#include <vector>
 
 #define MAX_LIGHTS 8
 
@@ -21,6 +22,9 @@ public:
 	void OnResize(int width, int height);
 
 public:
+
+	uint my_id = 0;
+	std::vector<float> vertices;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
