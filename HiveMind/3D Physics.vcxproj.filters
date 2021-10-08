@@ -294,6 +294,9 @@
     <ClInclude Include="ExternalLib\Glew\include\GL\wglew.h">
       <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
+    <ClInclude Include="LoadModel.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
