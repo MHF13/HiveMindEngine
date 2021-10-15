@@ -4,15 +4,16 @@
 #include "Primitive.h"
 #include "ExternalLib/MathGeoLib/include/Geometry/Sphere.h"
 
-
-
-
 #include "GUI/imgui.h"
 #include "GUI/backends/imgui_impl_sdl.h"
 #include "GUI/backends/imgui_impl_opengl3.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+
+
+
+
 
 
 
@@ -33,6 +34,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	
+	
 	
 	return ret;
 }
@@ -55,6 +58,9 @@ update_status ModuleSceneIntro::Update(float dt)
 	Primitive::Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
+
+
+
 
 
 	return UPDATE_CONTINUE;

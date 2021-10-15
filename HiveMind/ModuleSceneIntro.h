@@ -5,6 +5,7 @@
 #include "GUI/backends/imgui_impl_sdl.h"
 #include "GUI/backends/imgui_impl_opengl3.h"
 #include <gl/GL.h>
+#include <vector>
 
 class ModuleSceneIntro : public Module
 {
@@ -17,7 +18,7 @@ public:
 	bool CleanUp();
 
 	bool done = false;
-
+	std::vector<float> vertices;
 
 
 public:

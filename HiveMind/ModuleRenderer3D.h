@@ -21,6 +21,8 @@ public:
 
 	void OnResize(int width, int height);
 
+	void DrawCube();
+
 public:
 
 	uint my_id = 0;

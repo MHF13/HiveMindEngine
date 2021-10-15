@@ -118,6 +118,8 @@ bool ModuleRenderer3D::Init()
 
 	//OGL Vertex arrays
 
+	//TODO
+	/*
 	glGenBuffers(1, (GLuint*)&(my_id));
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	vertices = { 0.0f,0.0f,0.0f,
@@ -127,8 +129,8 @@ bool ModuleRenderer3D::Init()
 				1.0f,1.0f,0.0f,
 				0.0f,1.0f,0.0f};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size() * 3, &vertices[0], GL_STATIC_DRAW);
+	*/
 	
-
 
 	return ret;
 }
@@ -189,4 +191,17 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::DrawCube()
+{
+	glGenBuffers(1, (GLuint*)&(my_id));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	vertices = { 0.0f,0.0f,0.0f,
+				1.0f, 0.0f, 0.0f,
+				0.0f,1.0f,0.0f,
+				1.0f, 0.0f, 0.0f,
+				1.0f,1.0f,0.0f,
+				0.0f,1.0f,0.0f };
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size() * 3, &vertices[0], GL_STATIC_DRAW);
 }
