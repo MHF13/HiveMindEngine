@@ -2,9 +2,16 @@
 
 #include "Module.h"
 
+struct model
+{
+	uint id_index = 0; // index in VRAM
+	uint num_index = 0;
+	uint* index = nullptr;
 
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
-
+	uint id_vertex = 0; // unique vertex in VRAM
+	uint num_vertex = 0;
+	float* vertex = nullptr;
+};
 
 class LoadModel : public Module
 {
@@ -18,7 +25,14 @@ public:
 	
 
 
+
 private:
 
-	
+
+	std::vector<model> models;
+
+
 };
+
+
+// 
