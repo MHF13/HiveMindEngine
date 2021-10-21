@@ -2,19 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
-#include "ExternalLib/MathGeoLib/include/Geometry/Sphere.h"
-
-#include "GUI/imgui.h"
-#include "GUI/backends/imgui_impl_sdl.h"
-#include "GUI/backends/imgui_impl_opengl3.h"
-#include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
-
-
-
-
 
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -34,7 +21,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	
+	fish.LoadMesh("Assets/Models/warrior.fbx");
 	
 	
 	return ret;
@@ -59,7 +46,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = true;
 	p.Render();
 
-
+	fish.Render();
 
 
 

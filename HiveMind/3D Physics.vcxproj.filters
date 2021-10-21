@@ -294,7 +294,7 @@
     <ClInclude Include="ExternalLib\Glew\include\GL\wglew.h">
       <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
-    <ClInclude Include="LoadModel.h">
+    <ClInclude Include="LoadMesh.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
@@ -458,7 +458,7 @@
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="LoadModel.cpp">
+    <ClCompile Include="LoadMesh.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>

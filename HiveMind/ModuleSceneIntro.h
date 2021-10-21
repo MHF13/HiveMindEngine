@@ -4,7 +4,8 @@
 #include "GUI/imgui.h"
 #include "GUI/backends/imgui_impl_sdl.h"
 #include "GUI/backends/imgui_impl_opengl3.h"
-#include <gl/GL.h>
+#include "LoadMesh.h"
+
 #include <vector>
 
 class ModuleSceneIntro : public Module
@@ -22,4 +23,5 @@ public:
 
 
 public:
+	Mesh fish;
 };
