@@ -23,5 +23,6 @@ public:
 
 
 public:
+	//char* path;
 	Mesh fish;
 };

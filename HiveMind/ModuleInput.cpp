@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleWindow.h"
+#include "ModuleSceneIntro.h"
 
 #define MAX_KEYS 300
 
@@ -29,6 +31,7 @@ bool ModuleInput::Init()
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
+	
 
 	return ret;
 }
@@ -105,6 +108,19 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_QUIT:
 			quit = true;
 			break;
+
+			case SDL_DROPFILE:
+				dropped_filedir = e.drop.file;
+				// Shows directory of dropped file
+				//App->scene_intro->path = dropped_filedir;
+				if (dropped_filedir != nullptr)
+				{
+					App->scene_intro->fish.LoadMesh(dropped_filedir);
+				}
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"File dropped on window",dropped_filedir,App->window->window);
+				SDL_free(dropped_filedir);
+
+				break;
 
 			case SDL_WINDOWEVENT:
 			{

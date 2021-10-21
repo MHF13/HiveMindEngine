@@ -21,7 +21,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	fish.LoadMesh("Assets/Models/warrior.fbx");
+	
 	
 	
 	return ret;
@@ -47,6 +47,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.Render();
 
 	fish.Render();
+	//LOG(path);
 
 
 
