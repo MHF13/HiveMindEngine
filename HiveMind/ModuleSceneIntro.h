@@ -4,7 +4,7 @@
 #include "GUI/imgui.h"
 #include "GUI/backends/imgui_impl_sdl.h"
 #include "GUI/backends/imgui_impl_opengl3.h"
-#include "LoadMesh.h"
+#include "LoadModel.h"
 
 #include <vector>
 

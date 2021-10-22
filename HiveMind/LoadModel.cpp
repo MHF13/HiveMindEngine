@@ -1,4 +1,4 @@
-#include "LoadMesh.h"
+#include "LoadModel.h"
 
 /*
     Copyright 2011 Etay Meiri
@@ -20,7 +20,7 @@ Mesh::MeshEntry::MeshEntry()
     VB = 0;
     IB = 0;
     NumIndices = 0;
-    MaterialIndex = INVALID_MATERIAL;
+    
 };
 
 Mesh::MeshEntry::~MeshEntry()
@@ -48,6 +48,11 @@ void Mesh::MeshEntry::Init(const std::vector<Vertex>& Vertices,
     glGenBuffers(1, &IB);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * NumIndices, &Indices[0], GL_STATIC_DRAW);
+
+    struct aiLogStream stream;
+    stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+    aiAttachLogStream(&stream);
+
 }
 
 Mesh::Mesh()
@@ -61,38 +66,33 @@ Mesh::~Mesh()
 }
 
 
-void Mesh::Clear()
-{
-    /*for (unsigned int i = 0; i < m_Textures.size(); i++) {
-        SAFE_DELETE(m_Textures[i]);
-    }*/
-}
-
-
-bool Mesh::LoadMesh(const std::string& Filename)
+    
+bool Mesh::LoadMesh(const char* Filename)
 {
     // Release the previously loaded mesh (if it exists)
     Clear();
 
     bool Ret = false;
     Assimp::Importer Importer;
+      
 
-    const aiScene* pScene = Importer.ReadFile(Filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 
-    if (pScene) {
-        Ret = InitFromScene(pScene, Filename);
+    const aiScene* scene = aiImportFile(Filename, aiProcessPreset_TargetRealtime_MaxQuality);
+    if (scene != nullptr)
+    {
+        // Use scene->mNumMeshes to iterate on scene->mMeshes array
+        Ret = InitFromScene(scene, Filename);
+        aiReleaseImport(scene);
     }
-    else {
-        printf("Error parsing '%s': '%s'\n", Filename.c_str(), Importer.GetErrorString());
-    }
+    else
+        //printf("Error parsing '%c': '%c'\n", Filename.c_str(), Importer.GetErrorString());
 
     return Ret;
 }
 
-bool Mesh::InitFromScene(const aiScene* pScene, const std::string& Filename)
+bool Mesh::InitFromScene(const aiScene* pScene, const char* Filename)
 {
     m_Entries.resize(pScene->mNumMeshes);
-    //m_Textures.resize(pScene->mNumMaterials);
 
     // Initialize the meshes in the scene one by one
     for (unsigned int i = 0; i < m_Entries.size(); i++) {
@@ -156,4 +156,9 @@ void Mesh::Render()
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
+}
+
+void Mesh::Clear()
+{
+
 }

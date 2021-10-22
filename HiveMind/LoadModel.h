@@ -13,6 +13,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "Globals.h"
+
 struct Vertex
 {
     float3 m_pos;
@@ -43,7 +45,7 @@ public:
 
     ~Mesh();
 
-    bool LoadMesh(const std::string& Filename);
+    bool LoadMesh(const char* Filename);
 
     void Render();
 
