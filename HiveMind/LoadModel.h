@@ -37,7 +37,14 @@ struct Vertex
         m_normal = float3(0.0f, 0.0f, 0.0f);
     }
 };
-
+/*
+uint id_index = 0; // index in VRAM
+uint num_index = 0;
+uint* index = nullptr;
+uint id_vertex = 0; // unique vertex in VRAM
+uint num_vertex = 0;
+float* vertex = nullptr;
+*/
 class Mesh
 {
 public:
@@ -50,9 +57,8 @@ public:
     void Render();
 
 private:
-    bool InitFromScene(const aiScene* pScene, const std::string& Filename);
+    bool InitFromScene(const aiScene* pScene, const char* Filename);
     void InitMesh(unsigned int Index, const aiMesh* paiMesh);
-    //bool InitMaterials(const aiScene* pScene, const std::string& Filename);
     void Clear();
 
 #define INVALID_MATERIAL 0xFFFFFFFF
