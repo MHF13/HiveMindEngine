@@ -59,6 +59,7 @@ public:
 private:
     bool InitFromScene(const aiScene* pScene, const char* Filename);
     void InitMesh(unsigned int Index, const aiMesh* paiMesh);
+    bool InitTexture(const aiScene* pScene, const char* Filename);
     void Clear();
 
 #define INVALID_MATERIAL 0xFFFFFFFF
@@ -77,6 +78,11 @@ private:
         unsigned int MaterialIndex;
     };
 
+    GLuint textureID;
+    uint CHECKERS_HEIGHT = 64;
+    uint CHECKERS_WIDTH = 64;
+    GLubyte checkerImage[64][64][4];
     std::vector<MeshEntry> m_Entries;
-    //std::vector<Texture*> m_Textures;
+    //std::vector<GLuint> textureID;
+
 };

@@ -75,14 +75,17 @@ bool Mesh::LoadMesh(const char* Filename)
     bool Ret = false;
     Assimp::Importer Importer;
       
-
-
     const aiScene* scene = aiImportFile(Filename, aiProcessPreset_TargetRealtime_MaxQuality);
     if (scene != nullptr)
     {
         // Use scene->mNumMeshes to iterate on scene->mMeshes array
+
+
         Ret = InitFromScene(scene, Filename);
+        
         aiReleaseImport(scene);
+
+        
     }
     else
         //printf("Error parsing '%c': '%c'\n", Filename.c_str(), Importer.GetErrorString());
@@ -99,6 +102,33 @@ bool Mesh::InitFromScene(const aiScene* pScene, const char* Filename)
         const aiMesh* paiMesh = pScene->mMeshes[i];
         InitMesh(i, paiMesh);
     }
+    return InitTexture(pScene, Filename);
+    //return true;
+}
+
+bool Mesh::InitTexture(const aiScene* pScene, const char* Filename)
+{
+   
+    for (int i = 0; i < 64; i++) {
+        for (int j = 0; j < 64; j++) {
+            int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+            checkerImage[i][j][0] = (GLubyte)c;
+            checkerImage[i][j][1] = (GLubyte)c;
+            checkerImage[i][j][2] = (GLubyte)c;
+            checkerImage[i][j][3] = (GLubyte)255;
+        }
+    }
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+        0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    
     return true;
 }
 
@@ -136,6 +166,8 @@ void Mesh::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 
 void Mesh::Render()
 {
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
@@ -156,9 +188,13 @@ void Mesh::Render()
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    
 }
 
 void Mesh::Clear()
 {
-
+    aiDetachAllLogStreams();
 }

@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
+#include "LoadModel.h"
 
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -21,7 +22,11 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+    fish.LoadMesh("Assets/Models/BakerHouse.fbx");
 	
+    
+    
+    
 	
 	
 	return ret;
@@ -46,8 +51,13 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = true;
 	p.Render();
 
+	//glBindTexture(GL_TEXTURE_2D, textureID);
 	fish.Render();
-	//LOG(path);
+	//glBindTexture(GL_TEXTURE_2D, 0);
+
+	Primitive::Sphere s(1.0f, 10, 20, true);
+	s.Render();
+
 
 
 
