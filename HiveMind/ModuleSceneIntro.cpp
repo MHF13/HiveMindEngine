@@ -7,6 +7,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -22,9 +23,10 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-    fish.LoadMesh("Assets/Models/BakerHouse.fbx");
+    //fish.LoadMesh("Assets/Models/BakerHouse.fbx");
 	
-    
+
+	//fish.LoadTexture("Assets/Textures/a.png");
     
     
 	
@@ -50,15 +52,14 @@ update_status ModuleSceneIntro::Update(float dt)
 	Primitive::Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
+	
+	//fish.Render();
 
-	//glBindTexture(GL_TEXTURE_2D, textureID);
-	fish.Render();
-	//glBindTexture(GL_TEXTURE_2D, 0);
-
-	Primitive::Sphere s(1.0f, 10, 20, true);
-	s.Render();
-
-
+	//Primitive::Sphere s(1.0f, 10, 20, true);
+	//s.Render();
+	
+	Primitive::Cube c;
+	c.Render();
 
 
 	return UPDATE_CONTINUE;

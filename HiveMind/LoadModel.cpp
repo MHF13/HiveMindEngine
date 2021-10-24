@@ -96,7 +96,8 @@ bool Mesh::LoadMesh(const char* Filename)
 bool Mesh::InitFromScene(const aiScene* pScene, const char* Filename)
 {
     m_Entries.resize(pScene->mNumMeshes);
-
+    //filePath = Filename;
+    
     // Initialize the meshes in the scene one by one
     for (unsigned int i = 0; i < m_Entries.size(); i++) {
         const aiMesh* paiMesh = pScene->mMeshes[i];
@@ -189,9 +190,28 @@ void Mesh::Render()
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
 
+
+
     glBindTexture(GL_TEXTURE_2D, 0);
 
     
+}
+
+bool Mesh::LoadTexture(ILconst_string Filename)
+{/*
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+
+    // "Bind" the newly created texture : all future texture functions will modify this texture
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Give the image to OpenGL
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    */
+    return true;
 }
 
 void Mesh::Clear()

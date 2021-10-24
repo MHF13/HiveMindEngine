@@ -13,6 +13,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "il.h"
+
 #include "Globals.h"
 
 struct Vertex
@@ -53,6 +55,7 @@ public:
     ~Mesh();
 
     bool LoadMesh(const char* Filename);
+    bool LoadTexture(const char* Filename);
 
     void Render();
 
@@ -78,10 +81,18 @@ private:
         unsigned int MaterialIndex;
     };
 
+    const char* filePath;
+
     GLuint textureID;
     uint CHECKERS_HEIGHT = 64;
     uint CHECKERS_WIDTH = 64;
     GLubyte checkerImage[64][64][4];
+
+    ////////textures
+    ILuint imageID;
+
+
+
     std::vector<MeshEntry> m_Entries;
     //std::vector<GLuint> textureID;
 
