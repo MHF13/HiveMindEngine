@@ -1,24 +1,69 @@
 #pragma once
-#include "Module.h"
-#include "Globals.h"
-#include "ModuleWindow.h"
-#include <vector>
+#ifndef __GameObject_H__
+#define __GameObject_H__
 
-#define MAX_LIGHTS 8
+#include <list>
 
-class GameObject : public Module
+enum ComponentType
+{
+	ENABLED,
+};
+
+class GameObject
 {
 public:
-	GameObject(Application* app, bool start_enabled = true);
-	~GameObject();
+	GameObject();
+	virtual ~GameObject();
 
-	bool Init();
-	update_status PreUpdate(float dt);
-	update_status PostUpdate(float dt);
-	bool CleanUp();
+	void Update();
+
+	void Enable();
+	void Disable();
+	void CleanUp();
+
+	void AddComponent(ComponentType type);
+	void RemoveComponent(ComponentType type);
+
+	struct Component {
+
+		Component(ComponentType _type, GameObject* _owner)
+		{
+			type = _type;
+			owner = _owner;
+		}
+		virtual ~Component()
+		{
+			Destroy();
+		}
+
+		virtual void Update() {};
+
+		GameObject* GetOwner() { return owner; }
+		ComponentType GetType() { return type; }
+
+		void Enable() {active = true;}
+		void Disable() {active = false;}
+		bool GetEnabled(){return active;}
+		void Destroy(){delete(this);}
+
+	private:
+		bool active = false;
+		ComponentType type;
+		std::list<Component*> components;
+		GameObject* owner;
+	};
+
+	std::list<Component*> GetComponents();
+
+	Component* FindComponentByType(ComponentType type);
 
 
-public:
+private:
 
-	
+private:
+	bool enabled = false;
+	int	 id = 0;
+	std::list<Component*> components;
 };
+
+#endif

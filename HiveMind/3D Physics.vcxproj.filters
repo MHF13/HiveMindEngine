@@ -297,6 +297,9 @@
     <ClInclude Include="LoadModel.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ManagerGameObject.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -462,6 +465,9 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="LoadModel.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagerGameObject.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">

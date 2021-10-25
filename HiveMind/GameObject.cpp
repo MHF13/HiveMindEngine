@@ -1,49 +1,39 @@
-#include "Globals.h"
-#include "Application.h"
 #include "GameObject.h"
 
-
-#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
-
-GameObject::GameObject(Application* app, bool start_enabled) : Module(app, start_enabled)
+GameObject::GameObject()
 {
 }
 
-// Destructor
 GameObject::~GameObject()
-{}
-
-
-// Called before render is available
-bool GameObject::Init()
 {
-	bool ret = true;
-
-	
-	
-
-	return ret;
+}
+void GameObject::Update()
+{
+}
+void GameObject::Enable()
+{
+	enabled = true;
 }
 
-// PreUpdate: clear buffer
-update_status GameObject::PreUpdate(float dt)
+void GameObject::Disable()
 {
-	
-	return UPDATE_CONTINUE;
+	enabled = false;
 }
 
-// PostUpdate present buffer to screen
-update_status GameObject::PostUpdate(float dt)
+void GameObject::CleanUp()
 {
-	
-	return UPDATE_CONTINUE;
 }
 
-// Called before quitting
-bool GameObject::CleanUp()
+void GameObject::AddComponent(ComponentType type)
 {
-
-	return true;
 }
 
+void GameObject::RemoveComponent(ComponentType type)
+{
+}
+
+std::list<GameObject::Component*> GameObject::GetComponents()
+{
+	return std::list<Component*>();
+}
 
