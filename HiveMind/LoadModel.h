@@ -56,31 +56,21 @@ public:
 
     bool LoadMesh(const char* Filename);
     bool LoadTexture(const char* Filename);
-
     void Render();
+
+   
 
 private:
     bool InitFromScene(const aiScene* pScene, const char* Filename);
     void InitMesh(unsigned int Index, const aiMesh* paiMesh);
     bool InitTexture(const aiScene* pScene, const char* Filename);
     void Clear();
+    void Init(const std::vector<float3>& Vertices, const std::vector<float2>& texCoords, const std::vector<unsigned int>& Indices);
+
 
 #define INVALID_MATERIAL 0xFFFFFFFF
 
-    struct MeshEntry {
-        MeshEntry();
-
-        ~MeshEntry();
-
-        void Init(const std::vector<Vertex>& Vertices,
-            const std::vector<unsigned int>& Indices);
-
-        GLuint VB;
-        GLuint IB;
-        unsigned int NumIndices;
-        unsigned int MaterialIndex;
-    };
-
+private:
     const char* filePath;
 
     GLuint textureID;
@@ -88,12 +78,18 @@ private:
     uint CHECKERS_WIDTH = 64;
     GLubyte checkerImage[64][64][4];
 
+    GLuint VB;
+    GLuint TB;
+    GLuint IB;
+    unsigned int numIndices;
+    unsigned int materialIndex;
+
     ////////textures
     ILuint imageID;
 
 
 
-    std::vector<MeshEntry> m_Entries;
+    std::vector<Mesh> m_Entries;
     //std::vector<GLuint> textureID;
 
 };
