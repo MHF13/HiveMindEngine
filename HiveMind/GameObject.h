@@ -2,17 +2,51 @@
 #ifndef __GameObject_H__
 #define __GameObject_H__
 
-#include <list>
+#include <vector>
+#include "Globals.h"
 
-enum ComponentType
-{
-	ENABLED,
+
+
+class Component {
+public:
+
+	Component(GameObject* _owner)
+	{
+		active = true;
+		owner = _owner;
+		type = ComponentType::NONE;
+	}
+	virtual ~Component()
+	{
+		Destroy();
+	}
+
+	virtual void Update() {};
+
+	GameObject* GetOwner() { return owner; }
+
+	void Enable() { active = true; }
+	void Disable() { active = false; }
+	void Destroy() { delete(this); }
+
+	enum class ComponentType
+	{
+		NONE,
+		TRANSFORM,
+	};
+
+	ComponentType componentType;
+
+private:
+	bool active = false;
+	ComponentType type;
+	GameObject* owner;
 };
 
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(const char* name, GameObject* _parent, int _uid = -1);
 	virtual ~GameObject();
 
 	void Update();
@@ -21,41 +55,26 @@ public:
 	void Disable();
 	void CleanUp();
 
-	void AddComponent(ComponentType type);
+	void AddComponent(Component::ComponentType type);
 	void RemoveComponent(ComponentType type);
 
-	struct Component {
+	
 
-		Component(ComponentType _type, GameObject* _owner)
+	std::vector<Component*> GetComponents();
+
+	Component* GetAllComponents(ComponentType type)
+	{
+		for (size_t i = 0; i < components.size(); i++)
 		{
-			type = _type;
-			owner = _owner;
-		}
-		virtual ~Component()
-		{
-			Destroy();
+			if (components.at(i)->componentType == _componentType)
+			{
+				return components.at(i);
+			}
 		}
 
-		virtual void Update() {};
+		return nullptr;
 
-		GameObject* GetOwner() { return owner; }
-		ComponentType GetType() { return type; }
-
-		void Enable() {active = true;}
-		void Disable() {active = false;}
-		bool GetEnabled(){return active;}
-		void Destroy(){delete(this);}
-
-	private:
-		bool active = false;
-		ComponentType type;
-		std::list<Component*> components;
-		GameObject* owner;
-	};
-
-	std::list<Component*> GetComponents();
-
-	Component* FindComponentByType(ComponentType type);
+	}
 
 
 private:
@@ -63,7 +82,7 @@ private:
 private:
 	bool enabled = false;
 	int	 id = 0;
-	std::list<Component*> components;
+	std::vector<Component*> components;
 };
 
 #endif

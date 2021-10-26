@@ -57,7 +57,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	fish.Render();
 
     //glBindTexture(GL_TEXTURE_2D, textureID);
-	//Primitive::Sphere s(1.0f, 10, 20, true);
+	//Primitive::Cube s(1, 10, 20);
 	//s.Render();
    // glBindTexture(GL_TEXTURE_2D, 0);
 
