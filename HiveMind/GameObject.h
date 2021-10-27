@@ -46,7 +46,7 @@ private:
 class GameObject
 {
 public:
-	GameObject(const char* name, GameObject* _parent, int _uid = -1);
+	GameObject(const char* name, GameObject* _parent, int _id = -1);
 	virtual ~GameObject();
 
 	void Update();
@@ -56,33 +56,17 @@ public:
 	void CleanUp();
 
 	void AddComponent(Component::ComponentType type);
-	void RemoveComponent(ComponentType type);
+	void RemoveComponent(Component::ComponentType type);
 
-	
-
-	std::vector<Component*> GetComponents();
-
-	Component* GetAllComponents(ComponentType type)
-	{
-		for (size_t i = 0; i < components.size(); i++)
-		{
-			if (components.at(i)->componentType == _componentType)
-			{
-				return components.at(i);
-			}
-		}
-
-		return nullptr;
-
-	}
-
-
-private:
+	Component* GetAllComponents(Component::ComponentType type);
 
 private:
 	bool enabled = false;
 	int	 id = 0;
 	std::vector<Component*> components;
+	GameObject* daddy; //parent
+	std::vector<GameObject*> kodomus; //childs
+	const char* name;
 };
 
 #endif
