@@ -19,13 +19,13 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	bigDaddy = new GameObject("root", nullptr,NULL);
 	//LALA
-	objectList.push_back(CreateObjectInScene("A", bigDaddy));
-	LOG("%f.0  %f.0  %f.0",objectList.at(0)->transform->GetPos().x, objectList.at(0)->transform->GetPos().y, objectList.at(0)->transform->GetPos().z);
+	bigDaddy->childs.push_back(CreateObjectInScene("BakerHouse", bigDaddy,"Assets/Models/cube.fbx"));
+	LOG("%f.0  %f.0  %f.0", bigDaddy->childs.at(0)->transform->GetPos().x, bigDaddy->childs.at(0)->transform->GetPos().y, bigDaddy->childs.at(0)->transform->GetPos().z);
 	
 	
 	return ret;
@@ -43,9 +43,9 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
-GameObject* ModuleSceneIntro::CreateObjectInScene(const char* name, GameObject* parent, int id)
+GameObject* ModuleSceneIntro::CreateObjectInScene(const char* name, GameObject* parent, const char* filePath, int id)
 {
-	GameObject* newGameObject = new GameObject(name, parent, id);
+	GameObject* newGameObject = new GameObject(name, parent, filePath,id);
 	return newGameObject;
 
 }
@@ -64,13 +64,14 @@ update_status ModuleSceneIntro::Update(float dt)
 	//fish.Render();
 
 	//LALA
-	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT){
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN){
 
-		objectList.at(0)->transform->SetPos(3,9,2);
-		LOG("%s", objectList.at(0)->name);
-		LOG("%f.0  %f.0  %f.0", objectList.at(0)->transform->GetPos().x, objectList.at(0)->transform->GetPos().y, objectList.at(0)->transform->GetPos().z);
+		bigDaddy->childs.at(0)->transform->SetPos(3,9,2);
+		LOG("%s", bigDaddy->childs.at(0)->name);
+		LOG("%f.0  %f.0  %f.0", bigDaddy->childs.at(0)->transform->GetPos().x, bigDaddy->childs.at(0)->transform->GetPos().y, bigDaddy->childs.at(0)->transform->GetPos().z);
 
 	}
+	bigDaddy->childs.at(0)->Update();
 
 
 	return UPDATE_CONTINUE;

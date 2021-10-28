@@ -1,20 +1,11 @@
-#include "MeshC.h"
 
 /*
-MeshC::MeshC()
+MeshC::MeshC(GameObject* _owner,const char* fileName) : Component(_owner, ComponentType::MESH)
 {
-
-}
-MeshC::MeshC(const char* fileName)
-{
-    VB = 0;
-    IB = 0;
-    numIndices = 0;
-
-    LoadMesh(fileName);
+   
     
-};
-
+};*/
+/*
 MeshC::~MeshC()
 {
     if (VB != 0)

@@ -113,7 +113,9 @@ update_status ModuleInput::PreUpdate(float dt)
 				dropped_filedir = e.drop.file;
 				if (dropped_filedir != nullptr)
 				{
-					//App->scene_intro->fish.LoadMesh(dropped_filedir);
+					GameObject* dropped = App->scene_intro->CreateObjectInScene("dropped", App->scene_intro->bigDaddy, dropped_filedir);
+					App->scene_intro->bigDaddy->childs.push_back(dropped);
+					LOG("New object create with drag and drop function");
 				}
 				// Shows directory of dropped file
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"File dropped on window",dropped_filedir,App->window->window);

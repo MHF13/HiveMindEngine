@@ -7,8 +7,21 @@
 #include "glmath.h"
 #include "MathGeoLib.h"
 
+//Mesh
+#include "cimport.h"
+#include "scene.h"
+#include "postprocess.h"
+#pragma comment (lib, "ExternalLib/Assimp/libx86/assimp-vc142-mt.lib")
+
+#include "glew.h"
+
+#include <Importer.hpp>      // C++ importer interface  // Output data structure
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+#include "il.h"
+////////
 class GameObject;
-class MeshC;
 
 enum class ComponentType
 {
@@ -22,6 +35,7 @@ protected:
 	GameObject* owner = nullptr;
 
 public:
+	Component(){}
 	Component(GameObject* _owner,ComponentType _type) {
 		owner = _owner;
 		type = _type;
@@ -80,10 +94,62 @@ public:
 	bool wire = false;
 };
 
+class MeshC : public Component
+{
+public:
+	MeshC(){}
+	MeshC(GameObject* _owner, const char* fileName);
+	
+
+	~MeshC()
+	{
+		if (VB != 0)
+		{
+			glDeleteBuffers(1, &VB);
+		}
+
+		if (IB != 0)
+		{
+			glDeleteBuffers(1, &IB);
+		}
+		//Clear();
+	}
+
+	bool LoadMesh(const char* fileName);
+	void Render();
+
+
+
+private:
+	bool InitFromScene(const aiScene* pScene, const char* fileName);
+	void InitMesh(unsigned int Index, const aiMesh* paiMesh);
+	void Clear();
+	void Init(const std::vector<float3>& Vertices, const std::vector<unsigned int>& Indices);
+
+private:
+	const char* filePath;
+
+	GLuint textureID;
+	uint CHECKERS_HEIGHT = 64;
+	uint CHECKERS_WIDTH = 64;
+	GLubyte checkerImage[64][64][4];
+
+	GLuint VB;
+	GLuint IB;
+	unsigned int numIndices;
+	unsigned int materialIndex;
+
+
+
+
+	std::vector<MeshC> m_Entries;
+
+};
+
 class GameObject
 {
 public:
-	GameObject(const char* name, GameObject* _parent, int _id = -1);
+	GameObject(const char* name, GameObject* _parent, const char* filePath, int _id = -1);
 	virtual ~GameObject();
 
 	void Update();
@@ -92,7 +158,7 @@ public:
 	void Disable();
 	void CleanUp();
 
-	void AddComponent(ComponentType type);
+	void AddComponent(ComponentType type, const char* fileName = "");
 	void RemoveComponent(ComponentType type);
 
 	Component* GetAllComponents(ComponentType type);
@@ -102,12 +168,13 @@ public:
 	int	 id = 0;
 	//LALA : Vector de compontes 
 	//o un componente de cada tipo
+	
 	std::vector<Component*> components;
-	TransformC* transform;
+	TransformC* transform; 
+	MeshC* mesh;
 
 	GameObject* parent; 
 	std::vector<GameObject*> childs; 
 	const char* name;
 
-	MeshC* mesh;
 };

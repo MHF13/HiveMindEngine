@@ -15,7 +15,7 @@ public:
 	bool CleanUp();
 
 	
-	GameObject* cube;
+	
 	
 
 private:

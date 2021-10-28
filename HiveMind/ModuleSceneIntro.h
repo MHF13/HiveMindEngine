@@ -24,7 +24,7 @@ public:
 
 	bool done = false;
 	std::vector<float> vertices;
-	GameObject* CreateObjectInScene(const char* name, GameObject* parent, int id = -1);
+	GameObject* CreateObjectInScene(const char* name, GameObject* parent, const char* filePath, int id = -1);
 
 
 public:
@@ -34,8 +34,7 @@ public:
 	uint CHECKERS_HEIGHT = 64;
 	uint CHECKERS_WIDTH = 64;
 	GLubyte checkerImage[64][64][4];
-	GameObject* bigDaddy = nullptr;
+	GameObject* bigDaddy;
 
-	std::vector<GameObject*> objectList;
 
 };
