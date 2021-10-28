@@ -8,6 +8,12 @@
 #include "GUI/backends/imgui_impl_opengl3.h"
 #include "SDL\include\SDL_opengl.h"
 
+#include <list> 
+#include <fstream>
+#include <string>
+
+extern std::list<std::string> logs;
+
 class MeshC;
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -283,7 +289,18 @@ update_status ModuleEditor::Update(float dt)
         
         ImGui::EndMenu();
     }
-    if (ImGui::BeginMenu("Options"))
+	/// ----- Console -----
+	if (ImGui::BeginMenu("Windows"))
+	{
+		if (ImGui::MenuItem("console"))
+		{
+			console = !console;
+		}
+
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("Options"))
     {
         if (ImGui::MenuItem("GUI Demo"))
         {
@@ -299,13 +316,25 @@ update_status ModuleEditor::Update(float dt)
         }
         ImGui::EndMenu();
     }
+
     ImGui::EndMainMenuBar();
+	
+	//
+	if (console){
+		ImGui::Begin("Console", &console);
+		for (auto& a : logs)
+		{
+			ImGui::TextWrapped(a.c_str());
+		}
+		ImGui::End();
+	}
 
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     //glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 
     return UPDATE_CONTINUE;
 }
@@ -314,6 +343,7 @@ bool ModuleEditor::CleanUp()
 {
 	return true;
 }
+
 //for FPS
 void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float dt)
 {

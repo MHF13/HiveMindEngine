@@ -3,12 +3,12 @@
 GameObject::GameObject(const char* _name, GameObject* _parent, int _id)
 {
 	name = _name;
-	daddy = _parent;
+	parent = _parent;
 	enabled = true;
 	id = _id;
-	if (daddy != nullptr)
+	if (parent != nullptr)
 	{
-		daddy->kodomus.push_back(this);
+		parent->childs.push_back(this);
 	}
 }
 

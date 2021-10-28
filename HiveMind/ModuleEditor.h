@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
-#include <vector>
+#include "Globals.h"
+#include <gl/GL.h>
 #include "GameObject.h"
 
 class ModuleEditor : public Module
@@ -15,6 +16,7 @@ public:
 
 	
 	GameObject* cube;
+	
 
 private:
 
@@ -34,4 +36,10 @@ private:
 	///////////bools checkbox
 	bool windowActive = true;
 	bool hardwareActive = true;
+
+
+	//Console
+	bool console = false;
+
+	
 };

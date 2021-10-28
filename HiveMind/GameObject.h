@@ -64,8 +64,8 @@ public:
 	bool enabled = false;
 	int	 id = 0;
 	std::vector<Component*> components;
-	GameObject* daddy; //parent
-	std::vector<GameObject*> kodomus; //childs
+	GameObject* parent; 
+	std::vector<GameObject*> childs; 
 	const char* name;
 
 	MeshC* mesh;
