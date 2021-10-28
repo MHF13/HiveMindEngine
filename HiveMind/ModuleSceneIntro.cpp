@@ -22,11 +22,10 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	bigDaddy = new GameObject("root", nullptr,NULL);
+	bigDaddy = new GameObject("Scene", nullptr,NULL);
 	//LALA
-	bigDaddy->childs.push_back(CreateObjectInScene("BakerHouse", bigDaddy,"Assets/Models/cube.fbx"));
-	LOG("%f.0  %f.0  %f.0", bigDaddy->childs.at(0)->transform->GetPos().x, bigDaddy->childs.at(0)->transform->GetPos().y, bigDaddy->childs.at(0)->transform->GetPos().z);
-	
+	//CreateObjectInScene("BakerHouse", bigDaddy,"Assets/Models/cube.fbx");
+
 	
 	return ret;
 }
@@ -64,14 +63,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	//fish.Render();
 
 	//LALA
-	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN){
-
-		bigDaddy->childs.at(0)->transform->SetPos(3,9,2);
-		LOG("%s", bigDaddy->childs.at(0)->name);
-		LOG("%f.0  %f.0  %f.0", bigDaddy->childs.at(0)->transform->GetPos().x, bigDaddy->childs.at(0)->transform->GetPos().y, bigDaddy->childs.at(0)->transform->GetPos().z);
+	for (int i = 0; i < bigDaddy->childs.size(); i++)
+	{
+		bigDaddy->childs.at(i)->Update();
 
 	}
-	bigDaddy->childs.at(0)->Update();
 
 
 	return UPDATE_CONTINUE;

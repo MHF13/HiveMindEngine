@@ -281,7 +281,6 @@ update_status ModuleEditor::Update(float dt)
         if (ImGui::MenuItem("Cube"))
         {
             GameObject* placeHolder = App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cube.fbx");
-            App->scene_intro->bigDaddy->childs.push_back(placeHolder);
         }
         
         ImGui::EndMenu();
@@ -293,10 +292,17 @@ update_status ModuleEditor::Update(float dt)
 		{
 			console = !console;
 		}
+		if (ImGui::MenuItem("hierarchy"))
+		{
+			hierarchy = !hierarchy;
+		}
+		if (ImGui::MenuItem("inspector"))
+		{
+			inspector = !inspector;
+		}
 
 		ImGui::EndMenu();
 	}
-
 	if (ImGui::BeginMenu("Options"))
     {
         if (ImGui::MenuItem("GUI Demo"))
@@ -316,7 +322,7 @@ update_status ModuleEditor::Update(float dt)
 
     ImGui::EndMainMenuBar();
 	
-	//
+	//LALA
 	if (console){
 		ImGui::Begin("Console", &console);
 		for (auto& a : logs)
@@ -325,12 +331,39 @@ update_status ModuleEditor::Update(float dt)
 		}
 		ImGui::End();
 	}
-
+	if (hierarchy)
+	{
+		ImGui::Begin("Herarchy", &hierarchy);
+		if (App->scene_intro->bigDaddy != nullptr)
+		{
+			HierarchyList(App->scene_intro->bigDaddy);
+		}
+		ImGui::End();
+	}
+	if (inspector)
+	{
+		ImGui::Begin("Inspector", &inspector);
+		if (App->scene_intro->bigDaddy != nullptr)
+		{
+			for (int i = 0; i < App->scene_intro->bigDaddy->childs.size(); ++i)
+			{
+				if (App->scene_intro->bigDaddy->childs.at(i) == selectedH)
+				{
+					App->scene_intro->bigDaddy->childs.at(i)->transform->Draw();
+				}
+			}
+		}
+		ImGui::End();
+	}
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     //glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	//-----------------------------
+
+
 
 
     return UPDATE_CONTINUE;
@@ -339,6 +372,20 @@ update_status ModuleEditor::Update(float dt)
 bool ModuleEditor::CleanUp()
 {
 	return true;
+}
+
+void ModuleEditor::UpdateInspector(GameObject* go)
+{
+	if (go->components.size() > 0)
+	{
+		for (size_t i = 0; i < go->components.size(); i++)
+		{
+			if (go->components.at(i)->active)
+			{
+				go->components.at(i)->Draw();
+			}
+		}
+	}
 }
 
 //for FPS
@@ -359,5 +406,27 @@ void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float* push, i
 	else {
 		vec->erase(vec->begin());
 		vec->push_back((*push) * toMultiply);
+	}
+}
+
+void ModuleEditor::HierarchyList(GameObject* list)
+{
+	ImGuiTreeNodeFlags parentFlags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_DefaultOpen | (list->childs.empty() ? ImGuiTreeNodeFlags_Leaf : 0);
+	if (list == selectedH)
+	{
+		parentFlags |= ImGuiTreeNodeFlags_Selected;
+	}
+	bool open = ImGui::TreeNodeEx(list->name, parentFlags);
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left))
+	{
+		selectedH = list;
+	}
+	if (open) {
+		// Recursive call...
+		for (size_t i = 0; i < list->childs.size(); i++)
+		{
+			HierarchyList(list->childs.at(i));
+		};
+		ImGui::TreePop();
 	}
 }

@@ -14,14 +14,15 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	
-	
-	
+	void UpdateInspector(GameObject* go);
+
 
 private:
 
 	void RecolVector(std::vector<float>* vec, int size, float dt);
 	void RecolVector(std::vector<float>* vec, int size, float* push, int toMultiply);
+
+	void HierarchyList(GameObject* list);
 
 	bool showGuiDemo = false;
 	bool showConfig = false;
@@ -37,6 +38,13 @@ private:
 	bool windowActive = true;
 	bool hardwareActive = true;
 
+
+	/////WINDOWS
+
+	bool hierarchy = false;
+	GameObject* selectedH;
+
+	bool inspector = false;
 
 	//Console
 	bool console = false;

@@ -16,38 +16,45 @@ bool MeshC::LoadMesh(const char* fileName)
 	// Release the previously loaded mesh (if it exists)
 	Clear();
 
-	bool Ret = false;
-	Assimp::Importer Importer;
-
+	bool ret = false;
 	const aiScene* scene = aiImportFile(fileName, aiProcessPreset_TargetRealtime_MaxQuality);
-	if (scene != nullptr)
-	{
-		Ret = InitFromScene(scene, fileName);
 
-		aiReleaseImport(scene);
+	if (scene)
+	{
+		InitFromScene(scene, fileName);
+		ret = true;
 	}
-	else LOG("Filename not loaded");
-	return Ret;
+	else
+	{
+		LOG("Error loading '%s'", fileName);
+	}
+
+	return ret;
 }
-bool MeshC::InitFromScene(const aiScene* pScene, const char* fileName)
+void MeshC::InitFromScene(const aiScene* pScene, const char* fileName)
 {
 	m_Entries.resize(pScene->mNumMeshes);
 
-	// Initialize the meshes in the scene one by one
+	// Initialize the Meshses in the scene one by one
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
-		const aiMesh* paiMesh = pScene->mMeshes[i];
-		InitMesh(i, paiMesh);
+		const aiMesh* paiMeshs = pScene->mMeshes[i];
+		activeMeshes.push_back(paiMeshs);
+		InitMesh(i, paiMeshs);
 	}
-	return true;
 }
 
-void MeshC::Init(const std::vector<float3>& Vertices, const std::vector<unsigned int>& Indices)
+void MeshC::Init(const std::vector<float3>& Vertices, const std::vector<float2>& textCord,
+	const std::vector<unsigned int>& Indices)
 {
 	numIndices = Indices.size();
 
 	glGenBuffers(1, &VB);
 	glBindBuffer(GL_ARRAY_BUFFER, VB);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * Vertices.size(), &Vertices[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &TB);
+	glBindBuffer(GL_ARRAY_BUFFER, TB);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * Vertices.size(), &Vertices[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &IB);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
@@ -63,7 +70,7 @@ void MeshC::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 	m_Entries[Index].materialIndex = paiMesh->mMaterialIndex;
 
 	std::vector<float3> Vertices;
-
+	std::vector<float2> texCord;
 	std::vector<unsigned int> Indices;
 
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
@@ -71,9 +78,10 @@ void MeshC::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 	for (unsigned int i = 0; i < paiMesh->mNumVertices; i++) {
 		const aiVector3D* pPos = &(paiMesh->mVertices[i]);
 		const aiVector3D* pNormal = &(paiMesh->mNormals[i]);
+		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
 
 		Vertices.push_back(float3(pPos->x, pPos->y, pPos->z));
-
+		texCord.push_back(float2(pTexCoord->x, pTexCoord->y));
 	}
 
 	for (unsigned int i = 0; i < paiMesh->mNumFaces; i++) {
@@ -84,10 +92,15 @@ void MeshC::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 		Indices.push_back(Face.mIndices[2]);
 	}
 
-	m_Entries[Index].Init(Vertices, Indices);
+	m_Entries[Index].Init(Vertices, texCord, Indices);
 }
 void MeshC::Render()
 {
+	TransformC* t = new TransformC(nullptr);
+	t = dynamic_cast<TransformC*>(owner->GetComponent(ComponentType::TRANSFORM));
+	glPushMatrix();
+	glMultMatrixf(t->transform.M);
+
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
 	glEnableVertexAttribArray(0);
@@ -100,12 +113,20 @@ void MeshC::Render()
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float3), (const GLvoid*)12);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float3), (const GLvoid*)20);
 
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].TB);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].VB);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].IB);
 
 		const unsigned int MaterialIndex = m_Entries[i].materialIndex;
 
 		glDrawElements(GL_TRIANGLES, m_Entries[i].numIndices, GL_UNSIGNED_INT, 0);
 	}
+
+	glPopMatrix();
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
@@ -119,7 +140,7 @@ void MeshC::Clear()
 {
 	aiDetachAllLogStreams();
 }
-////////////////GAMEOBJECT////////////////////////
+////////////////GAMEOBJECT///////////////
 GameObject::GameObject(const char* _name, GameObject* _parent, const char* filePath, int _id)
 {
 	name = _name;
@@ -143,7 +164,8 @@ GameObject::~GameObject()
 }
 void GameObject::Update()
 {
-	mesh->Render();
+	transform->Update();
+	mesh->Update();
 }
 void GameObject::Enable()
 {
@@ -164,21 +186,15 @@ void GameObject::AddComponent(ComponentType type, const char* fileName)
 	//Component* ret = nullptr;
 	if (type == ComponentType::TRANSFORM)
 	{
-		//LALA nuevo metodo para dar un componente transform, esto lo haremos cuando se cree un gameObject en el start
-		// Si modificamos los componentes como el transform y los inicializamod con un valor por defeto para luego 
-		// ponerle cosas puede funcionar
 
-		//Component* newC = new TransformC(this);
-		//components.push_back(newC);
-
-		// o guardar la componente en una variable del tipo de la propia componente?
-		// me he dado cuenta qqeu para acceder es como mas facil? no se
 		transform = new TransformC(this);
-		
+		components.push_back(transform);
 	}
 	if (type == ComponentType::MESH)
 	{
 		mesh = new MeshC(this, fileName);
+		components.push_back(mesh);
+
 	}
 
 }
@@ -199,4 +215,17 @@ Component* GameObject::GetAllComponents(ComponentType type)
 
 	return nullptr;
 
+}
+
+Component* GameObject::GetComponent(ComponentType _type)
+{
+	for (size_t i = 0; i < components.size(); i++)
+	{
+		if (components.at(i)->type == _type)
+		{
+			return components.at(i);
+		}
+	}
+
+	return nullptr;
 }

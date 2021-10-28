@@ -3,9 +3,15 @@
 #include <vector>
 #include "Globals.h"
 
+//Inspector
+#include "GUI/imgui.h"
+#include "GUI/backends/imgui_impl_sdl.h"
+#include "GUI/backends/imgui_impl_opengl3.h"
+
 //Transform
 #include "glmath.h"
 #include "MathGeoLib.h"
+#include "glmath.h"
 
 //Mesh
 #include "cimport.h"
@@ -46,19 +52,19 @@ public:
 		Destroy();
 	}
 
-	virtual void Update() {
-		
-	};
+	virtual void Update() {};
+
+	virtual void Draw() {};
+
+	virtual void Enable() { active = true; }
+	virtual void Disable() { active = false; }
+	virtual void Destroy() {  }
+
 
 	GameObject* GetOwner() { return owner; }
-
-	void Enable() { active = true; }
-	void Disable() { active = false; }
-	void Destroy() {  }
-
-
 	
 	bool active = false;
+	bool updateTransform = false;
 	ComponentType type = ComponentType::NONE;
 
 };
@@ -69,6 +75,42 @@ public:
 		transform = IdentityMatrix;
 	}
 	~TransformC() {}
+
+	void Draw() override {
+		if (ImGui::CollapsingHeader("Local Transformation"))
+		{
+			if (ImGui::SliderFloat3("Position", &position, -10, 10))updateTransform = true;
+			if (ImGui::DragFloat("Rotation X", &rotation.x, -20, 20)) rotationX = true;
+			if (ImGui::DragFloat("Rotation Y", &rotation.y, -20, 20)) rotationY = true;
+			if (ImGui::DragFloat("Rotation Z", &rotation.z, -20, 20)) rotationZ = true;
+			if (ImGui::SliderFloat3("Scale", &scale, 0, 10))updateTransform = true;
+		}
+	}
+
+	void Update() override {
+		if (active)
+		{
+			if (updateTransform) {
+				SetPos(position.x, position.y, position.z);
+				Scale(scale.x, scale.y, scale.z);
+				updateTransform = false;
+
+			}
+			if (rotation.x){
+				SetRotation(rotation.x, vec3(1, 0, 0));
+				rotationX = false;
+			}
+			if (rotation.y){
+				SetRotation(rotation.y, vec3(0, 1, 0));
+				rotationY = false;
+			}
+			if (rotation.z){
+				SetRotation(rotation.z, vec3(0, 0, 1));
+				rotationZ = false;
+			}
+		}
+
+	}
 
 	void SetPos(float x, float y, float z)
 	{
@@ -90,6 +132,12 @@ public:
 public:
 
 	mat4x4 transform;
+	vec3 position;
+	vec3 rotation;
+	bool rotationX;
+	bool rotationY;
+	bool rotationZ;
+	vec3 scale;
 	bool axis = false;
 	bool wire = false;
 };
@@ -114,35 +162,39 @@ public:
 		}
 		//Clear();
 	}
+	void Update() override {
+		if (active)
+			Render();
+	};
 
+	void Draw() override {};
 	bool LoadMesh(const char* fileName);
 	void Render();
 
-
-
 private:
-	bool InitFromScene(const aiScene* pScene, const char* fileName);
+	void InitFromScene(const aiScene* pScene, const char* fileName);
 	void InitMesh(unsigned int Index, const aiMesh* paiMesh);
 	void Clear();
-	void Init(const std::vector<float3>& Vertices, const std::vector<unsigned int>& Indices);
-
+	void Init(const std::vector<float3>& Vertices, const std::vector<float2>& textCord,
+		const std::vector<unsigned int>& Indices);
 private:
 	const char* filePath;
 
+	GLuint meshTextureID;
+	GLuint texture;
 	GLuint textureID;
 	uint CHECKERS_HEIGHT = 64;
 	uint CHECKERS_WIDTH = 64;
 	GLubyte checkerImage[64][64][4];
 
 	GLuint VB;
+	GLuint TB;
 	GLuint IB;
 	unsigned int numIndices;
 	unsigned int materialIndex;
 
-
-
-
 	std::vector<MeshC> m_Entries;
+	std::vector<const aiMesh*> activeMeshes;
 
 };
 
@@ -154,6 +206,8 @@ public:
 
 	void Update();
 
+	bool GetEnable() { return enabled; };
+
 	void Enable();
 	void Disable();
 	void CleanUp();
@@ -162,6 +216,7 @@ public:
 	void RemoveComponent(ComponentType type);
 
 	Component* GetAllComponents(ComponentType type);
+	Component* GetComponent(ComponentType _type);
 
 public:
 	bool enabled = false;
