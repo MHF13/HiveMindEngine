@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
-#include "LoadModel.h"
+#include "MeshC.h"
 
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -23,13 +23,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-    fish.LoadMesh("Assets/Models/BakerHouse.fbx");
 
-   
-
-	//fish.LoadTexture("Assets/Textures/a.png");
-    
-    
 	
 	
 	return ret;
@@ -47,23 +41,25 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
+GameObject* ModuleSceneIntro::CreateObjectInScene(const char* name, GameObject* parent, int id)
+{
+	GameObject* newGameObject = new GameObject(name, parent, id);
+	return newGameObject;
+
+}
+
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
 	Primitive::Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
-	
+
+	/*Primitive::Cube s(1, 10, 20);
+	s.Render();*/
+
+	MeshC fish("Assets/Models/BakerHouse.fbx");
 	fish.Render();
-
-    //glBindTexture(GL_TEXTURE_2D, textureID);
-	//Primitive::Cube s(1, 10, 20);
-	//s.Render();
-   // glBindTexture(GL_TEXTURE_2D, 0);
-
-	//Primitive::Cube c;
-	//c.Render();
-
 
 	return UPDATE_CONTINUE;
 }

@@ -113,7 +113,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				dropped_filedir = e.drop.file;
 				if (dropped_filedir != nullptr)
 				{
-					App->scene_intro->fish.LoadMesh(dropped_filedir);
+					//App->scene_intro->fish.LoadMesh(dropped_filedir);
 				}
 				// Shows directory of dropped file
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"File dropped on window",dropped_filedir,App->window->window);

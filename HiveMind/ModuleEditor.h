@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include <vector>
+#include "GameObject.h"
 
 class ModuleEditor : public Module
 {
@@ -12,6 +13,8 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	
+	GameObject* cube;
 
 private:
 

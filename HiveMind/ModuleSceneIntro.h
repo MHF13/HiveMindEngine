@@ -4,10 +4,14 @@
 #include "GUI/imgui.h"
 #include "GUI/backends/imgui_impl_sdl.h"
 #include "GUI/backends/imgui_impl_opengl3.h"
-#include "LoadModel.h"
+#include "Glew.h"
 #include "Primitive.h"
+#include "GameObject.h"
+
 
 #include <vector>
+
+class GameObject;
 
 class ModuleSceneIntro : public Module
 {
@@ -21,6 +25,7 @@ public:
 
 	bool done = false;
 	std::vector<float> vertices;
+	GameObject* CreateObjectInScene(const char* name, GameObject* parent, int id = -1);
 
 
 public:
@@ -30,5 +35,8 @@ public:
 	uint CHECKERS_HEIGHT = 64;
 	uint CHECKERS_WIDTH = 64;
 	GLubyte checkerImage[64][64][4];
-	Mesh fish;
+	GameObject* bigDaddy = nullptr;
+
+	GameObject* cum = nullptr;
+
 };

@@ -1,15 +1,14 @@
 #pragma once
-#ifndef __GameObject_H__
-#define __GameObject_H__
 
 #include <vector>
 #include "Globals.h"
 
-
+class GameObject;
+class MeshC;
 
 class Component {
 public:
-
+	Component(){}
 	Component(GameObject* _owner)
 	{
 		active = true;
@@ -27,12 +26,13 @@ public:
 
 	void Enable() { active = true; }
 	void Disable() { active = false; }
-	void Destroy() { delete(this); }
+	void Destroy() {  }
 
 	enum class ComponentType
 	{
 		NONE,
 		TRANSFORM,
+		MESH,
 	};
 
 	ComponentType componentType;
@@ -60,13 +60,13 @@ public:
 
 	Component* GetAllComponents(Component::ComponentType type);
 
-private:
+public:
 	bool enabled = false;
 	int	 id = 0;
 	std::vector<Component*> components;
 	GameObject* daddy; //parent
 	std::vector<GameObject*> kodomus; //childs
 	const char* name;
-};
 
-#endif
+	MeshC* mesh;
+};

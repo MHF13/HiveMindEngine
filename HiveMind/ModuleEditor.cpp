@@ -1,13 +1,14 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleEditor.h"
+#include "ModuleSceneIntro.h"
 
 #include "GUI/imgui.h"
 #include "GUI/backends/imgui_impl_sdl.h"
 #include "GUI/backends/imgui_impl_opengl3.h"
 #include "SDL\include\SDL_opengl.h"
 
-
+class MeshC;
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -111,9 +112,6 @@ update_status ModuleEditor::Update(float dt)
                 if(ImGui::Checkbox("FullDesktop", &App->window->fullDesktop))
 					App->window->fullScreen = App->window->resizable = App->window->borderless = false , App->window->SetWindowModification();
 
-                //ImGui::Text("%s", glGetString(GL_VERSION));
-
-               // ImGui::Text("Refresh rate %d", SDLGetWindowRefreshRate());
             }
           
         }
@@ -270,6 +268,19 @@ update_status ModuleEditor::Update(float dt)
         if (ImGui::MenuItem("Cut", "CTRL+X")) {}
         if (ImGui::MenuItem("Copy", "CTRL+C")) {}
         if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+        ImGui::EndMenu();
+    }
+    if (ImGui::BeginMenu("Create"))
+    {
+        if (ImGui::MenuItem("Cube"))
+        {
+            cube = new GameObject("Cube", App->scene_intro->bigDaddy);
+            App->scene_intro->bigDaddy->kodomus.push_back(cube);
+            cube->AddComponent(Component::ComponentType::MESH);
+            //App->scene_intro->bigDaddy->kodomus.back()->components.push_back(new MeshC("Assets/Models/fish.fbx"));
+            cube->AddComponent(Component::ComponentType::TRANSFORM);
+        }
+        
         ImGui::EndMenu();
     }
     if (ImGui::BeginMenu("Options"))

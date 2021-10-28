@@ -1,12 +1,12 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const char* _name, GameObject* _parent, int _id = -1)
+GameObject::GameObject(const char* _name, GameObject* _parent, int _id)
 {
 	name = _name;
 	daddy = _parent;
 	enabled = true;
 	id = _id;
-	if (!daddy)
+	if (daddy != nullptr)
 	{
 		daddy->kodomus.push_back(this);
 	}

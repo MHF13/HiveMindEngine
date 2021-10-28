@@ -3,6 +3,7 @@
 #include <string>
 #include "cimport.h"
 #include "scene.h"
+#include "GameObject.h"
 #include "postprocess.h"
 #pragma comment (lib, "ExternalLib/Assimp/libx86/assimp-vc142-mt.lib")
 
@@ -17,6 +18,8 @@
 
 #include "Globals.h"
 
+class Component;
+
 struct Vertex
 {
     float3 m_pos;
@@ -25,10 +28,9 @@ struct Vertex
 
     Vertex() {}
 
-    Vertex(const float3& pos, const float2& tex, const float3& normal)
+    Vertex(const float3& pos, const float3& normal)
     {
         m_pos = pos;
-        m_tex = tex;
         m_normal = normal;
     }
 
@@ -39,33 +41,25 @@ struct Vertex
         m_normal = float3(0.0f, 0.0f, 0.0f);
     }
 };
-/*
-uint id_index = 0; // index in VRAM
-uint num_index = 0;
-uint* index = nullptr;
-uint id_vertex = 0; // unique vertex in VRAM
-uint num_vertex = 0;
-float* vertex = nullptr;
-*/
-class Mesh
+
+class MeshC : public Component
 {
 public:
-    Mesh();
+    MeshC();
+    MeshC(const char* fileName);
 
-    ~Mesh();
+    ~MeshC();
 
-    bool LoadMesh(const char* Filename);
-    bool LoadTexture(const char* Filename);
+    bool LoadMesh(const char* fileName);
     void Render();
 
    
 
 private:
-    bool InitFromScene(const aiScene* pScene, const char* Filename);
+    bool InitFromScene(const aiScene* pScene, const char* fileName);
     void InitMesh(unsigned int Index, const aiMesh* paiMesh);
-    bool InitTexture(const aiScene* pScene, const char* Filename);
     void Clear();
-    void Init(const std::vector<float3>& Vertices, const std::vector<float2>& texCoords, const std::vector<unsigned int>& Indices);
+    void Init(const std::vector<float3>& Vertices, const std::vector<unsigned int>& Indices);
 
 
 #define INVALID_MATERIAL 0xFFFFFFFF
@@ -79,17 +73,13 @@ private:
     GLubyte checkerImage[64][64][4];
 
     GLuint VB;
-    GLuint TB;
     GLuint IB;
     unsigned int numIndices;
     unsigned int materialIndex;
 
-    ////////textures
-    ILuint imageID;
 
 
 
-    std::vector<Mesh> m_Entries;
-    //std::vector<GLuint> textureID;
-
+    std::vector<MeshC> m_Entries;
+   
 };
