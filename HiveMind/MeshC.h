@@ -41,7 +41,7 @@ struct Vertex
         m_normal = float3(0.0f, 0.0f, 0.0f);
     }
 };
-
+/*
 class MeshC : public Component
 {
 public:
@@ -83,3 +83,4 @@ private:
     std::vector<MeshC> m_Entries;
    
 };
+*/

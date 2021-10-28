@@ -23,7 +23,9 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-
+	//LALA
+	objectList.push_back(CreateObjectInScene("A", bigDaddy));
+	LOG("%f.0  %f.0  %f.0",objectList.at(0)->transform->GetPos().x, objectList.at(0)->transform->GetPos().y, objectList.at(0)->transform->GetPos().z);
 	
 	
 	return ret;
@@ -58,8 +60,18 @@ update_status ModuleSceneIntro::Update(float dt)
 	/*Primitive::Cube s(1, 10, 20);
 	s.Render();*/
 
-	MeshC fish("Assets/Models/BakerHouse.fbx");
-	fish.Render();
+	//MeshC fish("Assets/Models/BakerHouse.fbx");
+	//fish.Render();
+
+	//LALA
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT){
+
+		objectList.at(0)->transform->SetPos(3,9,2);
+		LOG("%s", objectList.at(0)->name);
+		LOG("%f.0  %f.0  %f.0", objectList.at(0)->transform->GetPos().x, objectList.at(0)->transform->GetPos().y, objectList.at(0)->transform->GetPos().z);
+
+	}
+
 
 	return UPDATE_CONTINUE;
 }

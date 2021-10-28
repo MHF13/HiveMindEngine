@@ -17,7 +17,6 @@ void log(const char file[], int line, const char* format, ...)
 	vsprintf_s(tmp_string, 4096, format, ap);
 	va_end(ap);
 	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
-	//OutputDebugString(tmp_string2);
+	OutputDebugString(tmp_string2);
 	logs.push_back(tmp_string2);
-	//
 }

@@ -10,6 +10,7 @@ GameObject::GameObject(const char* _name, GameObject* _parent, int _id)
 	{
 		parent->childs.push_back(this);
 	}
+	AddComponent(ComponentType::TRANSFORM);
 }
 
 GameObject::~GameObject()
@@ -32,24 +33,34 @@ void GameObject::CleanUp()
 {
 }
 
-void GameObject::AddComponent(Component::ComponentType type)
+void GameObject::AddComponent(ComponentType type)
 {
-	Component* ret = nullptr;
-	if (type == Component::ComponentType::TRANSFORM)
+	//Component* ret = nullptr;
+	if (type == ComponentType::TRANSFORM)
 	{
-		//ret = new ComponentT
+		//LALA nuevo metodo para dar un componente transform, esto lo haremos cuando se cree un gameObject en el start
+		// Si modificamos los componentes como el transform y los inicializamod con un valor por defeto para luego 
+		// ponerle cosas puede funcionar
+
+		//Component* newC = new TransformC(this);
+		//components.push_back(newC);
+
+		// o guardar la componente en una variable del tipo de la propia componente?
+		// me he dado cuenta qqeu para acceder es como mas facil? no se
+		transform = new TransformC(this);
+		
 	}
 }
 
-void GameObject::RemoveComponent(Component::ComponentType type)
+void GameObject::RemoveComponent(ComponentType type)
 {
 
 }
-Component* GameObject::GetAllComponents(Component::ComponentType type)
+Component* GameObject::GetAllComponents(ComponentType type)
 {
 	for (size_t i = 0; i < components.size(); i++)
 	{
-		if (components.at(i)->componentType == type)
+		if (components.at(i)->type == type)
 		{
 			return components.at(i);
 		}
@@ -58,4 +69,3 @@ Component* GameObject::GetAllComponents(Component::ComponentType type)
 	return nullptr;
 
 }
-

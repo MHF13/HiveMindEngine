@@ -1,6 +1,6 @@
 #include "MeshC.h"
 
-
+/*
 MeshC::MeshC()
 {
 
@@ -85,7 +85,6 @@ bool MeshC::InitFromScene(const aiScene* pScene, const char* fileName)
     return true;
 }
 
-
 void MeshC::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 {
     m_Entries[Index].materialIndex = paiMesh->mMaterialIndex;
@@ -142,7 +141,7 @@ void MeshC::Render()
     //--Disables States--//
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    */
+    
     glBindTexture(GL_TEXTURE_2D, textureID);
 
     glEnableVertexAttribArray(0);
@@ -171,8 +170,8 @@ void MeshC::Render()
 
 }
 
-
 void MeshC::Clear()
 {
     aiDetachAllLogStreams();
 }
+*/

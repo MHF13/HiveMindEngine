@@ -31,6 +31,12 @@
     <Filter Include="Sources\Tools\Glew">
       <UniqueIdentifier>{4ff89981-21f2-4a88-9467-bb4320b452d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Modules\GameObjects">
+      <UniqueIdentifier>{7d97da1e-3ce7-474f-b2b1-c475232e205d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\GameObjects\Components">
+      <UniqueIdentifier>{8d094c9f-d71c-45ea-a43e-340c73413751}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -298,10 +304,10 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ManagerGameObject.h">
-      <Filter>Sources\Modules</Filter>
+      <Filter>Sources\Modules\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Sources\Modules</Filter>
+      <Filter>Sources\Modules\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -468,10 +474,10 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ManagerGameObject.cpp">
-      <Filter>Sources\Modules</Filter>
+      <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Sources\Modules</Filter>
+      <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

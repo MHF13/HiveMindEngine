@@ -8,7 +8,6 @@
 #include "Primitive.h"
 #include "GameObject.h"
 
-
 #include <vector>
 
 class GameObject;
@@ -37,6 +36,6 @@ public:
 	GLubyte checkerImage[64][64][4];
 	GameObject* bigDaddy = nullptr;
 
-	GameObject* cum = nullptr;
+	std::vector<GameObject*> objectList;
 
 };

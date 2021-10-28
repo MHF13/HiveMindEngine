@@ -281,10 +281,10 @@ update_status ModuleEditor::Update(float dt)
         if (ImGui::MenuItem("Cube"))
         {
             cube = new GameObject("Cube", App->scene_intro->bigDaddy);
-            App->scene_intro->bigDaddy->kodomus.push_back(cube);
-            cube->AddComponent(Component::ComponentType::MESH);
+            App->scene_intro->bigDaddy->childs.push_back(cube);
+            //cube->AddComponent(Component::ComponentType::MESH);
             //App->scene_intro->bigDaddy->kodomus.back()->components.push_back(new MeshC("Assets/Models/fish.fbx"));
-            cube->AddComponent(Component::ComponentType::TRANSFORM);
+            //cube->AddComponent(Component::ComponentType::TRANSFORM);
         }
         
         ImGui::EndMenu();
