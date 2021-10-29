@@ -41,6 +41,7 @@ void MeshC::InitFromScene(const aiScene* pScene, const char* fileName)
 		activeMeshes.push_back(paiMeshs);
 		InitMesh(i, paiMeshs);
 	}
+	//InitTexture(pScene, fileName);
 }
 
 void MeshC::Init(const std::vector<float3>& Vertices, const std::vector<float2>& textCord,
@@ -64,6 +65,31 @@ void MeshC::Init(const std::vector<float3>& Vertices, const std::vector<float2>&
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+}
+bool MeshC::InitTexture(const aiScene* pScene, const char* Filename)
+{
+
+	for (int i = 0; i < 64; i++) {
+		for (int j = 0; j < 64; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerImage[i][j][0] = (GLubyte)c;
+			checkerImage[i][j][1] = (GLubyte)c;
+			checkerImage[i][j][2] = (GLubyte)c;
+			checkerImage[i][j][3] = (GLubyte)255;
+		}
+	}
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	return true;
 }
 void MeshC::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 {

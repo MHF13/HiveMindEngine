@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
-#include "MeshC.h"
 
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -23,8 +22,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	bigDaddy = new GameObject("Scene", nullptr,NULL);
-	//LALA
-	//CreateObjectInScene("BakerHouse", bigDaddy,"Assets/Models/cube.fbx");
+	
+	CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx");
 
 	
 	return ret;

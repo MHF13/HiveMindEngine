@@ -30,11 +30,9 @@ public:
 public:
 	//char* path;
 
-	GLuint textureID;
-	uint CHECKERS_HEIGHT = 64;
-	uint CHECKERS_WIDTH = 64;
-	GLubyte checkerImage[64][64][4];
 	GameObject* bigDaddy;
+
+	
 
 
 };

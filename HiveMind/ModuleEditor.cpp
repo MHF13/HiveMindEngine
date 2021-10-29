@@ -14,8 +14,6 @@
 
 extern std::list<std::string> logs;
 
-class MeshC;
-
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -50,6 +48,32 @@ update_status ModuleEditor::Update(float dt)
     //Config
     
     if (showGuiDemo) ImGui::ShowDemoWindow(&showGuiDemo);
+    if (showAboutWindow)
+    {
+        ImGui::Begin("About", &showAboutWindow);
+        SDL_version version;
+        SDL_GetVersion(&version);
+        ImGui::Text("HiveMindEngine v0.2");
+        ImGui::Text("Give your games the best possible face lift!");
+        ImGui::Text("By Mario Hernandez & Oriol Valverde");
+        ImGui::Text("\n3rd Party Libraries used");
+        ImGui::BulletText("SDL");
+        ImGui::SameLine();
+        ImGui::Text("%d.%d.%d", version.major, version.minor, version.patch);
+        ImGui::BulletText("ImGui 1.85");
+        ImGui::BulletText("MathGeoLib 1.5");
+        ImGui::BulletText("OpenGL");
+        ImGui::SameLine();
+        ImGui::Text("%s", glGetString(GL_VERSION));
+        ImGui::Text("\nLicense:");
+        ImGui::Text("MIT License");
+        ImGui::Text("\nCopyright (c) 2021 Mario Hernandez & Oriol Valverde");
+        ImGui::Text("\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and /or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:");
+        ImGui::Text("\nThe above copyright noticeand this permission notice shall be included in all\ncopies or substantial portions of the Software.");
+        ImGui::Text("\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.");
+
+        ImGui::End();
+    }
     if (showConfig)
     {
 		
@@ -266,16 +290,7 @@ update_status ModuleEditor::Update(float dt)
 
 
     }
-    if (ImGui::BeginMenu("Edit"))
-    {
-        if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-        if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-        ImGui::Separator();
-        if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-        if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-        if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-        ImGui::EndMenu();
-    }
+    
     if (ImGui::BeginMenu("Create"))
     {
         if (ImGui::MenuItem("Cube"))
@@ -319,7 +334,22 @@ update_status ModuleEditor::Update(float dt)
         }
         ImGui::EndMenu();
     }
-
+    if (ImGui::BeginMenu("Help"))
+    {
+        if (ImGui::MenuItem("Wiki"))
+        {
+            ShellExecuteA(NULL, "open", "https://github.com/MHF13/HiveMindEngine", NULL, NULL, SW_SHOWNORMAL);
+        }
+        if (ImGui::MenuItem("Latest Version"))
+        {
+            ShellExecuteA(NULL, "open", "https://github.com/MHF13/HiveMindEngine/releases", NULL, NULL, SW_SHOWNORMAL);
+        }
+        if (ImGui::MenuItem("About Us"))
+        {
+            showAboutWindow = !showAboutWindow;
+        }
+        ImGui::EndMenu();
+    }
     ImGui::EndMainMenuBar();
 	
 	//LALA
@@ -349,7 +379,16 @@ update_status ModuleEditor::Update(float dt)
 			{
 				if (App->scene_intro->bigDaddy->childs.at(i) == selectedH)
 				{
-					App->scene_intro->bigDaddy->childs.at(i)->transform->Draw();
+                    if (ImGui::CollapsingHeader("Local Transformation",true))
+                    {
+                        TransformC* trans = App->scene_intro->bigDaddy->childs.at(i)->transform;
+                        if (ImGui::SliderFloat3("Position", &trans->position, -10, 10))trans->updateTransform = true;
+                        if (ImGui::DragFloat("Rotation X", &trans->rotation.x, -20, 20)) trans->rotationX = true;
+                        if (ImGui::DragFloat("Rotation Y", &trans->rotation.y, -20, 20)) trans->rotationY = true;
+                        if (ImGui::DragFloat("Rotation Z", &trans->rotation.z, -20, 20)) trans->rotationZ = true;
+                        if (ImGui::SliderFloat3("Scale", &trans->scale, 1, 10))trans->updateTransform = true;
+                    }
+					
 				}
 			}
 		}
@@ -411,18 +450,17 @@ void ModuleEditor::RecolVector(std::vector<float>* vec, int size, float* push, i
 
 void ModuleEditor::HierarchyList(GameObject* list)
 {
-	ImGuiTreeNodeFlags parentFlags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_DefaultOpen | (list->childs.empty() ? ImGuiTreeNodeFlags_Leaf : 0);
+	ImGuiTreeNodeFlags parent = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_DefaultOpen | (list->childs.empty() ? ImGuiTreeNodeFlags_Leaf : 0);
 	if (list == selectedH)
 	{
-		parentFlags |= ImGuiTreeNodeFlags_Selected;
+		parent |= ImGuiTreeNodeFlags_Selected;
 	}
-	bool open = ImGui::TreeNodeEx(list->name, parentFlags);
+	bool openTreenNode = ImGui::TreeNodeEx(list->name, parent);
 	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left))
 	{
 		selectedH = list;
 	}
-	if (open) {
-		// Recursive call...
+	if (openTreenNode) {
 		for (size_t i = 0; i < list->childs.size(); i++)
 		{
 			HierarchyList(list->childs.at(i));

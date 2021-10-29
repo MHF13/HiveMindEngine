@@ -300,7 +300,7 @@
     <ClInclude Include="ExternalLib\Glew\include\GL\wglew.h">
       <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
-    <ClInclude Include="MeshC.h">
+    <ClInclude Include="Material.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ManagerGameObject.h">
@@ -470,7 +470,7 @@
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="MeshC.cpp">
+    <ClCompile Include="Material.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ManagerGameObject.cpp">

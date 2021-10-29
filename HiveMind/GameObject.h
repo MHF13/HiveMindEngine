@@ -34,6 +34,7 @@ enum class ComponentType
 	NONE,
 	TRANSFORM,
 	MESH,
+	MATERIAL,
 };
 
 class Component {
@@ -73,30 +74,22 @@ class TransformC : public Component {
 public:
 	TransformC(GameObject* _owner) : Component(_owner, ComponentType::TRANSFORM) {
 		transform = IdentityMatrix;
+		position = vec3(0, 0, 0);
+		scale = vec3(1, 1, 1);
 	}
 	~TransformC() {}
 
-	void Draw() override {
-		if (ImGui::CollapsingHeader("Local Transformation"))
-		{
-			if (ImGui::SliderFloat3("Position", &position, -10, 10))updateTransform = true;
-			if (ImGui::DragFloat("Rotation X", &rotation.x, -20, 20)) rotationX = true;
-			if (ImGui::DragFloat("Rotation Y", &rotation.y, -20, 20)) rotationY = true;
-			if (ImGui::DragFloat("Rotation Z", &rotation.z, -20, 20)) rotationZ = true;
-			if (ImGui::SliderFloat3("Scale", &scale, 0, 10))updateTransform = true;
-		}
-	}
 
 	void Update() override {
 		if (active)
 		{
 			if (updateTransform) {
-				SetPos(position.x, position.y, position.z);
-				Scale(scale.x, scale.y, scale.z);
+				transform.translate(position.x, position.y, position.z);
+				if(scale.x != 0 && scale.y != 0 && scale.z != 0)	transform.scale(scale.x, scale.y, scale.z);
 				updateTransform = false;
 
 			}
-			if (rotation.x){
+			if (rotation.x) {
 				SetRotation(rotation.x, vec3(1, 0, 0));
 				rotationX = false;
 			}
@@ -108,6 +101,7 @@ public:
 				SetRotation(rotation.z, vec3(0, 0, 1));
 				rotationZ = false;
 			}
+
 		}
 
 	}
@@ -120,10 +114,9 @@ public:
 	{
 		transform.rotate(angle, u);
 	}
-	void Scale(float x, float y, float z)
-	{
-		transform.scale(x, y, z);
-	}
+	
+		
+	
 
 	vec3 GetPos() {
 		return transform.translation(); 
@@ -170,6 +163,8 @@ public:
 	void Draw() override {};
 	bool LoadMesh(const char* fileName);
 	void Render();
+
+	bool InitTexture(const aiScene* pScene, const char* Filename);
 
 private:
 	void InitFromScene(const aiScene* pScene, const char* fileName);

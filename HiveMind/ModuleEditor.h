@@ -26,6 +26,7 @@ private:
 
 	bool showGuiDemo = false;
 	bool showConfig = false;
+	bool showAboutWindow = false;
 	bool showSmallExample = true;
 	bool closeWindow = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -41,13 +42,13 @@ private:
 
 	/////WINDOWS
 
-	bool hierarchy = false;
+	bool hierarchy = true;
 	GameObject* selectedH;
 
-	bool inspector = false;
+	bool inspector = true;
 
 	//Console
-	bool console = false;
+	bool console = true;
 
 	
 };
