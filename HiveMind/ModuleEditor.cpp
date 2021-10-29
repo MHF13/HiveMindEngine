@@ -176,15 +176,13 @@ update_status ModuleEditor::Update(float dt)
                 ImGui::Separator();
                 ImGui::Text("GPU :");
                 ImGui::SameLine();
-                ImGui::TextColored({ 255,255,0,1 }, "%s", glGetString(GL_RENDERER));
+                ImGui::TextColored({ 255,255,0,1 }, "%s", glGetString(GL_VENDOR));
 
                 ImGui::Text("Brand :");
                 ImGui::SameLine();
                 ImGui::TextColored({ 255,255,0,1 }, "%s", glGetString(GL_RENDERER));
-                ImGui::Text("VRAM Budget :");
-                ImGui::SameLine();
-                // ImGui::TextColored({ 255,255,0,1 }, "%s", glGetString());
 
+                
             }
 
 
@@ -379,7 +377,7 @@ update_status ModuleEditor::Update(float dt)
 			{
 				if (App->scene_intro->bigDaddy->childs.at(i) == selectedH)
 				{
-                    if (ImGui::CollapsingHeader("Local Transformation",true))
+                    if (ImGui::CollapsingHeader("Local Transformation"))
                     {
                         TransformC* trans = App->scene_intro->bigDaddy->childs.at(i)->transform;
                         if (ImGui::SliderFloat3("Position", &trans->position, -10, 10))trans->updateTransform = true;
