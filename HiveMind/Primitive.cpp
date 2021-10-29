@@ -15,6 +15,7 @@ namespace Primitive
 	PrimitiveTypes Primitive::GetType() const
 	{
 		return type;
+
 	}
 
 	// ------------------------------------------------------------

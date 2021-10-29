@@ -14,6 +14,7 @@ namespace Primitive
 		Primitive_Sphere,
 		Primitive_Cylinder,
 		Primitive_Curva
+
 	};
 
 	class Primitive
