@@ -293,7 +293,7 @@ update_status ModuleEditor::Update(float dt)
     {
         if (ImGui::MenuItem("Cube"))
         {
-            GameObject* placeHolder = App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cube.fbx");
+            GameObject* placeHolder = App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cube.fbx",NULL);
         }
         
         ImGui::EndMenu();
@@ -399,7 +399,10 @@ update_status ModuleEditor::Update(float dt)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	//-----------------------------
-
+    if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {
+        if (selectedH != nullptr && selectedH != App->scene_intro->bigDaddy)
+            App->camera->CenterToObject(selectedH);
+    }
 
 
 

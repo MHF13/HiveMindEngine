@@ -26,6 +26,12 @@
 #include <gl/GLU.h>
 
 #include "il.h"
+#include "ilut.h"
+
+#pragma comment (lib, "devIL.lib")
+#pragma comment (lib, "ILU.lib") 
+#pragma comment (lib, "ILUT.lib")
+
 ////////
 class GameObject;
 
@@ -34,7 +40,7 @@ enum class ComponentType
 	NONE,
 	TRANSFORM,
 	MESH,
-	MATERIAL,
+	TEXTURE,
 };
 
 class Component {
@@ -104,6 +110,7 @@ public:
 
 		}
 
+
 	}
 
 	void SetPos(float x, float y, float z)
@@ -115,14 +122,30 @@ public:
 		transform.rotate(angle, u);
 	}
 	
-		
+	float4x4 GetGlobalTransform() {
+		positionF.x = position.x;
+		positionF.y = position.y;
+		positionF.z = position.z;
+
+		rotF = {rotation.x,rotation.y,rotation.z};
+		rotationQ = Quat::FromEulerXYZ(rotF[0] * DEGTORAD, rotF[1] * DEGTORAD, rotF[2] * DEGTORAD);
+
+		scaleF = { scale.x,scale.y,scale.z };
+
+		return float4x4::FromTRS(positionF, rotationQ, scaleF);
+	}
 	
+
 
 	vec3 GetPos() {
 		return transform.translation(); 
 	}
 
 public:
+	float3 positionF;
+	float3 rotF;
+	Quat rotationQ;
+	float3 scaleF;
 
 	mat4x4 transform;
 	vec3 position;
@@ -158,13 +181,13 @@ public:
 	void Update() override {
 		if (active)
 			Render();
+
 	};
 
 	void Draw() override {};
 	bool LoadMesh(const char* fileName);
 	void Render();
 
-	bool InitTexture(const aiScene* pScene, const char* Filename);
 
 private:
 	void InitFromScene(const aiScene* pScene, const char* fileName);
@@ -172,12 +195,12 @@ private:
 	void Clear();
 	void Init(const std::vector<float3>& Vertices, const std::vector<float2>& textCord,
 		const std::vector<unsigned int>& Indices);
-private:
+
 	const char* filePath;
 
-	GLuint meshTextureID;
+	GLuint meshTextureId;
 	GLuint texture;
-	GLuint textureID;
+	GLuint textureId;
 	uint CHECKERS_HEIGHT = 64;
 	uint CHECKERS_WIDTH = 64;
 	GLubyte checkerImage[64][64][4];
@@ -187,16 +210,77 @@ private:
 	GLuint IB;
 	unsigned int numIndices;
 	unsigned int materialIndex;
+public:
+	uint numVertex = 0;
+	std::vector<float3> vertices;
 
-	std::vector<MeshC> m_Entries;
+	std::vector<MeshC> mEntries;
 	std::vector<const aiMesh*> activeMeshes;
+
+};
+
+class TextureC : public Component
+{
+public:
+	TextureC() {}
+	TextureC(GameObject* owner, const char* texturePath) : Component(owner, ComponentType::TEXTURE) {
+
+		ilInit();
+		iluInit();
+		ilutInit();
+
+		LoadTexture(texturePath);
+	}
+
+	~TextureC() {}
+	//void Update() override {};
+
+	void LoadTexture(const char* texturePath)
+	{
+		/*for (int i = 0; i < 64; i++) {
+			for (int j = 0; j < 64; j++) {
+				int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+				checkerImage[i][j][0] = (GLubyte)c;
+				checkerImage[i][j][1] = (GLubyte)c;
+				checkerImage[i][j][2] = (GLubyte)c;
+				checkerImage[i][j][3] = (GLubyte)255;
+			}
+		}*/
+	
+		ILuint imageId;
+		bool load = ilLoadImage(texturePath);
+		ilGenImages(1, &imageId);
+		ilBindImage(imageId);
+		if (load)
+		{
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glGenTextures(1, &textureId);
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+				0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+			glGenerateMipmap(GL_TEXTURE_2D);
+			LOG("Texture Loaded");
+		}
+
+	}
+
+private:
+	GLuint textureId;
+	GLubyte checkerImage[64][64][4];
+
+	//std::vector<TextureC> textures;
 
 };
 
 class GameObject
 {
 public:
-	GameObject(const char* name, GameObject* _parent, const char* filePath, int _id = -1);
+
+	GameObject(const char* name, GameObject* _parent, const char* filePath, const char* materialPath);
 	virtual ~GameObject();
 
 	void Update();
@@ -215,13 +299,11 @@ public:
 
 public:
 	bool enabled = false;
-	int	 id = 0;
-	//LALA : Vector de compontes 
-	//o un componente de cada tipo
-	
+
 	std::vector<Component*> components;
 	TransformC* transform; 
 	MeshC* mesh;
+	TextureC* texture;
 
 	GameObject* parent; 
 	std::vector<GameObject*> childs; 

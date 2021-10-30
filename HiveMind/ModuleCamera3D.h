@@ -15,6 +15,8 @@ public:
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
+	void CenterToObject(GameObject* object);
+
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
 
@@ -23,6 +25,8 @@ private:
 	void CalculateViewMatrix();
 
 public:
+	Frustum frustum;
+
 	vec3 X, Y, Z, Position, Reference;
 
 private:

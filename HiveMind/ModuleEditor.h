@@ -16,7 +16,6 @@ public:
 
 	void UpdateInspector(GameObject* go);
 
-
 private:
 
 	void RecolVector(std::vector<float>* vec, int size, float dt);
@@ -43,7 +42,7 @@ private:
 	/////WINDOWS
 
 	bool hierarchy = true;
-	GameObject* selectedH;
+	GameObject* selectedH = nullptr;
 
 	bool inspector = true;
 

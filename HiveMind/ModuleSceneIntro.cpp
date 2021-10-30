@@ -21,9 +21,9 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	bigDaddy = new GameObject("Scene", nullptr,NULL);
+	bigDaddy = new GameObject("Scene", nullptr,NULL,NULL);
 	
-	CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx");
+	CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", "Assets/Textures/a.dds");
 
 	
 	return ret;
@@ -41,9 +41,9 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
-GameObject* ModuleSceneIntro::CreateObjectInScene(const char* name, GameObject* parent, const char* filePath, int id)
+GameObject* ModuleSceneIntro::CreateObjectInScene(const char* name, GameObject* parent, const char* filePath, const char* materialPath)
 {
-	GameObject* newGameObject = new GameObject(name, parent, filePath,id);
+	GameObject* newGameObject = new GameObject(name, parent, filePath, materialPath);
 	return newGameObject;
 
 }

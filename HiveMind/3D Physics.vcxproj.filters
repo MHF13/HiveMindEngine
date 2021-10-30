@@ -300,15 +300,13 @@
     <ClInclude Include="ExternalLib\Glew\include\GL\wglew.h">
       <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ManagerGameObject.h">
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -470,15 +468,13 @@
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="ManagerGameObject.cpp">
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LogyCar.rc" />

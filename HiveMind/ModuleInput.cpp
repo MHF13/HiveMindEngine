@@ -113,8 +113,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				dropped_filedir = e.drop.file;
 				if (dropped_filedir != nullptr)
 				{
-					GameObject* dropped = App->scene_intro->CreateObjectInScene("dropped", App->scene_intro->bigDaddy, dropped_filedir);
-					App->scene_intro->bigDaddy->childs.push_back(dropped);
+					GameObject* dropped = App->scene_intro->CreateObjectInScene("dropped", App->scene_intro->bigDaddy, dropped_filedir,NULL);
 					LOG("New object create with drag and drop function");
 				}
 				// Shows directory of dropped file

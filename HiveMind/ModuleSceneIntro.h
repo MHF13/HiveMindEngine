@@ -24,7 +24,7 @@ public:
 
 	bool done = false;
 	std::vector<float> vertices;
-	GameObject* CreateObjectInScene(const char* name, GameObject* parent, const char* filePath, int id = -1);
+	GameObject* CreateObjectInScene(const char* name, GameObject* parent, const char* filePath,const char* materialPath);
 
 
 public:

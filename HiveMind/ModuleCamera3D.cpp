@@ -142,6 +142,24 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 	CalculateViewMatrix();
 }
 
+//------------------------------------------------------------------
+void ModuleCamera3D::CenterToObject(GameObject* object)
+{
+
+	float3 center = float3::zero;
+
+	center.x = object->transform->position.x;
+	center.y = object->transform->position.y;
+	center.z = object->transform->position.z;
+
+	App->camera->Position.Set(center.x + 3, center.y + 3, center.z + 3);
+
+	// Make the camera to look at the center of the box
+	vec3 centerObject = { center.x,center.y,center.z };
+	LookAt(centerObject);
+
+}
+
 
 // -----------------------------------------------------------------
 void ModuleCamera3D::Move(const vec3 &Movement)

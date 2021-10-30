@@ -28,20 +28,18 @@ bool MeshC::LoadMesh(const char* fileName)
 	{
 		LOG("Error loading '%s'", fileName);
 	}
-
 	return ret;
 }
 void MeshC::InitFromScene(const aiScene* pScene, const char* fileName)
 {
-	m_Entries.resize(pScene->mNumMeshes);
+	mEntries.resize(pScene->mNumMeshes);
 
 	// Initialize the Meshses in the scene one by one
-	for (unsigned int i = 0; i < m_Entries.size(); i++) {
+	for (unsigned int i = 0; i < mEntries.size(); i++) {
 		const aiMesh* paiMeshs = pScene->mMeshes[i];
 		activeMeshes.push_back(paiMeshs);
 		InitMesh(i, paiMeshs);
 	}
-	//InitTexture(pScene, fileName);
 }
 
 void MeshC::Init(const std::vector<float3>& Vertices, const std::vector<float2>& textCord,
@@ -66,34 +64,10 @@ void MeshC::Init(const std::vector<float3>& Vertices, const std::vector<float2>&
 	aiAttachLogStream(&stream);
 
 }
-bool MeshC::InitTexture(const aiScene* pScene, const char* Filename)
-{
 
-	for (int i = 0; i < 64; i++) {
-		for (int j = 0; j < 64; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkerImage[i][j][0] = (GLubyte)c;
-			checkerImage[i][j][1] = (GLubyte)c;
-			checkerImage[i][j][2] = (GLubyte)c;
-			checkerImage[i][j][3] = (GLubyte)255;
-		}
-	}
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	return true;
-}
 void MeshC::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 {
-	m_Entries[Index].materialIndex = paiMesh->mMaterialIndex;
+	mEntries[Index].materialIndex = paiMesh->mMaterialIndex;
 
 	std::vector<float3> Vertices;
 	std::vector<float2> texCord;
@@ -118,7 +92,7 @@ void MeshC::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 		Indices.push_back(Face.mIndices[2]);
 	}
 
-	m_Entries[Index].Init(Vertices, texCord, Indices);
+	mEntries[Index].Init(Vertices, texCord, Indices);
 }
 void MeshC::Render()
 {
@@ -127,25 +101,25 @@ void MeshC::Render()
 	glPushMatrix();
 	glMultMatrixf(t->transform.M);
 
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, textureId);
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
-	for (unsigned int i = 0; i < m_Entries.size(); i++) {
-		glBindBuffer(GL_ARRAY_BUFFER, m_Entries[i].VB);
+	for (unsigned int i = 0; i < mEntries.size(); i++) {
+		glBindBuffer(GL_ARRAY_BUFFER, mEntries[i].VB);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float3), 0);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float3), (const GLvoid*)12);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float3), (const GLvoid*)20);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].TB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].VB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].IB);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].TB);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].VB);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].IB);
 
-		const unsigned int MaterialIndex = m_Entries[i].materialIndex;
+		const unsigned int MaterialIndex = mEntries[i].materialIndex;
 
-		glDrawElements(GL_TRIANGLES, m_Entries[i].numIndices, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, mEntries[i].numIndices, GL_UNSIGNED_INT, 0);
 	}
 
 	glPopMatrix();
@@ -167,12 +141,11 @@ void MeshC::Clear()
 	aiDetachAllLogStreams();
 }
 ////////////////GAMEOBJECT///////////////
-GameObject::GameObject(const char* _name, GameObject* _parent, const char* filePath, int _id)
+GameObject::GameObject(const char* _name, GameObject* _parent, const char* filePath, const char* materialPath)
 {
 	name = _name;
 	parent = _parent;
 	enabled = true;
-	id = _id;
 	if (parent != nullptr)
 	{
 		parent->childs.push_back(this);
@@ -180,7 +153,10 @@ GameObject::GameObject(const char* _name, GameObject* _parent, const char* fileP
 	if(_parent != nullptr)
 	{
 		AddComponent(ComponentType::TRANSFORM);
-		AddComponent(ComponentType::MESH, filePath);
+		if (filePath != NULL)
+			AddComponent(ComponentType::MESH, filePath);
+		if (materialPath != NULL)    
+			AddComponent(ComponentType::TEXTURE, materialPath);
 	}
 	
 }
@@ -192,6 +168,7 @@ void GameObject::Update()
 {
 	transform->Update();
 	mesh->Update();
+
 }
 void GameObject::Enable()
 {
@@ -221,6 +198,11 @@ void GameObject::AddComponent(ComponentType type, const char* fileName)
 		mesh = new MeshC(this, fileName);
 		components.push_back(mesh);
 
+	}
+	if (type == ComponentType::TEXTURE)
+	{
+		texture = new TextureC(this, fileName);
+		components.push_back(texture);
 	}
 
 }
@@ -255,3 +237,4 @@ Component* GameObject::GetComponent(ComponentType _type)
 
 	return nullptr;
 }
+
