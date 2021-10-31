@@ -112,6 +112,15 @@ public:
 		return global.ptr();
 	}
 	
+	void ResetTransform()
+	{
+		position = float3::zero;
+		rotEuler = float3::zero;
+		scale = float3::one;
+
+		updateTransform = true;
+	}
+
 	float3 GetPos() {
 		return position;
 	}

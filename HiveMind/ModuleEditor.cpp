@@ -399,6 +399,8 @@ update_status ModuleEditor::Update(float dt)
                         if (ImGui::DragFloat3("Position", &trans->position[0], 0.1f))trans->updateTransform = true;
                         if (ImGui::DragFloat3("Rotation", &trans->rotEuler[0], 0.1f))trans->updateTransform = true;
                         if (ImGui::DragFloat3("Scale", &trans->scale[0], 0.1f))trans->updateTransform = true;
+                        if (ImGui::Button("Reset Transform"))
+                            trans->ResetTransform();
                     }
 					
 				}
