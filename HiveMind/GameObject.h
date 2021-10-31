@@ -79,9 +79,13 @@ public:
 class TransformC : public Component {
 public:
 	TransformC(GameObject* _owner) : Component(_owner, ComponentType::TRANSFORM) {
-		transform = IdentityMatrix;
-		position = vec3(0, 0, 0);
-		scale = vec3(1, 1, 1);
+
+		transform.SetIdentity();
+		transform.Decompose(position, rotQuaternion, scale);
+		rotQuaternion.Normalize();
+		rotEuler = rotQuaternion.ToEulerXYZ();
+
+		global = transform.Transposed();
 	}
 	~TransformC() {}
 
@@ -90,72 +94,37 @@ public:
 		if (active)
 		{
 			if (updateTransform) {
-				transform.translate(position.x, position.y, position.z);
-				if(scale.x != 0 && scale.y != 0 && scale.z != 0)	transform.scale(scale.x, scale.y, scale.z);
+
+				rotQuaternion = Quat::FromEulerXYZ(rotEuler.x * DEGTORAD, rotEuler.y * DEGTORAD, rotEuler.z * DEGTORAD);
+				rotQuaternion.Normalize();
+
+				transform = float4x4::FromTRS(position, rotQuaternion, scale);
+
+				global = transform.Transposed();
+
 				updateTransform = false;
 
 			}
-			if (rotation.x) {
-				SetRotation(rotation.x, vec3(1, 0, 0));
-				rotationX = false;
-			}
-			if (rotation.y){
-				SetRotation(rotation.y, vec3(0, 1, 0));
-				rotationY = false;
-			}
-			if (rotation.z){
-				SetRotation(rotation.z, vec3(0, 0, 1));
-				rotationZ = false;
-			}
-
 		}
-
-
-	}
-
-	void SetPos(float x, float y, float z)
-	{
-		transform.translate(x, y, z);
-	}
-	void SetRotation(float angle, const vec3& u)
-	{
-		transform.rotate(angle, u);
 	}
 	
-	float4x4 GetGlobalTransform() {
-		positionF.x = position.x;
-		positionF.y = position.y;
-		positionF.z = position.z;
-
-		rotF = {rotation.x,rotation.y,rotation.z};
-		rotationQ = Quat::FromEulerXYZ(rotF[0] * DEGTORAD, rotF[1] * DEGTORAD, rotF[2] * DEGTORAD);
-
-		scaleF = { scale.x,scale.y,scale.z };
-
-		return float4x4::FromTRS(positionF, rotationQ, scaleF);
+	const float* GetGlobalTransform() {
+		return global.ptr();
 	}
 	
-
-
-	vec3 GetPos() {
-		return transform.translation(); 
+	float3 GetPos() {
+		return position;
 	}
 
 public:
-	float3 positionF;
-	float3 rotF;
-	Quat rotationQ;
-	float3 scaleF;
 
-	mat4x4 transform;
-	vec3 position;
-	vec3 rotation;
-	bool rotationX;
-	bool rotationY;
-	bool rotationZ;
-	vec3 scale;
-	bool axis = false;
-	bool wire = false;
+	float4x4 global;
+	float4x4 transform;
+	float3 position;
+	float3 scale;
+	float3 rotEuler;
+	Quat rotQuaternion;
+
 };
 
 class MeshC : public Component

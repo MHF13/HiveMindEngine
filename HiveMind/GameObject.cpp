@@ -99,7 +99,8 @@ void MeshC::Render()
 	TransformC* t = new TransformC(nullptr);
 	t = dynamic_cast<TransformC*>(owner->GetComponent(ComponentType::TRANSFORM));
 	glPushMatrix();
-	glMultMatrixf(t->transform.M);
+	glMultMatrixf(t->GetGlobalTransform());
+	//glMultMatrixf(t->transform.M);
 
 	glBindTexture(GL_TEXTURE_2D, textureId);
 

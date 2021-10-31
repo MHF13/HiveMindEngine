@@ -396,12 +396,9 @@ update_status ModuleEditor::Update(float dt)
                     if (ImGui::CollapsingHeader("Local Transformation"))
                     {
                         TransformC* trans = App->scene_intro->bigDaddy->childs.at(i)->transform;
-                        if (ImGui::DragFloat3("Position", &trans->position,0.1f))trans->updateTransform = true;
-
-                        if (ImGui::DragFloat("Rotation X", &trans->rotation.x, 0.1f)) trans->rotationX = true;
-                        if (ImGui::DragFloat("Rotation Y", &trans->rotation.y, 0.1f)) trans->rotationY = true;
-                        if (ImGui::DragFloat("Rotation Z", &trans->rotation.z, 0.1f)) trans->rotationZ = true;
-                        if (ImGui::DragFloat3("Scale", &trans->scale, 0.1f))trans->updateTransform = true;
+                        if (ImGui::DragFloat3("Position", &trans->position[0], 0.1f))trans->updateTransform = true;
+                        if (ImGui::DragFloat3("Rotation", &trans->rotEuler[0], 0.1f))trans->updateTransform = true;
+                        if (ImGui::DragFloat3("Scale", &trans->scale[0], 0.1f))trans->updateTransform = true;
                     }
 					
 				}
