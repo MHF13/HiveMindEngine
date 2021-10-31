@@ -3,6 +3,7 @@
 #include "ModuleEditor.h"
 #include "ModuleSceneIntro.h"
 
+
 #include "GUI/imgui.h"
 #include "GUI/backends/imgui_impl_sdl.h"
 #include "GUI/backends/imgui_impl_opengl3.h"
@@ -47,7 +48,7 @@ update_status ModuleEditor::Update(float dt)
 
     //Config
     
-    if (showGuiDemo) ImGui::ShowDemoWindow(&showGuiDemo);
+    //if (showGuiDemo) ImGui::ShowDemoWindow(&showGuiDemo);
     if (showAboutWindow)
     {
         ImGui::Begin("About", &showAboutWindow);
@@ -193,9 +194,9 @@ update_status ModuleEditor::Update(float dt)
 		
     }
 
-    ImGui::BeginMainMenuBar();
 
-    if (ImGui::BeginMenu("File"))
+
+    /*if (ImGui::BeginMenu("File"))
     {
         ImGui::MenuItem("(demo menu)", NULL, false, false);
         if (ImGui::MenuItem("New"))
@@ -285,17 +286,36 @@ update_status ModuleEditor::Update(float dt)
 
         ImGui::EndMenu();
 
-
-
     }
-    
-    if (ImGui::BeginMenu("Create"))
+    */
+    ImGui::BeginMainMenuBar();
+    if (ImGui::BeginMenu("File"))
     {
-        if (ImGui::MenuItem("Cube"))
-        {
-            GameObject* placeHolder = App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cube.fbx",NULL);
+        if (ImGui::BeginMenu("Quit", "Alt+F4")) {
+            return update_status::UPDATE_STOP;
+            ImGui::EndMenu();
         }
-        
+
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("GameObject"))
+    {
+        if (ImGui::MenuItem("Create Empty"))
+        {
+            App->scene_intro->CreateObjectInScene("Empty object", App->scene_intro->bigDaddy, NULL, NULL);
+        }
+        //
+        if (ImGui::BeginMenu("Primitives"))
+        {
+            if (ImGui::MenuItem("Cube"))
+            {
+                App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cube.fbx", NULL);
+            }
+            ImGui::EndMenu();
+        }
+        //
+
         ImGui::EndMenu();
     }
 	/// ----- Console -----
@@ -318,17 +338,13 @@ update_status ModuleEditor::Update(float dt)
 	}
 	if (ImGui::BeginMenu("Options"))
     {
-        if (ImGui::MenuItem("GUI Demo"))
+        /*if (ImGui::MenuItem("GUI Demo"))
         {
             showGuiDemo = !showGuiDemo;
-        }
-        if (ImGui::MenuItem("FPS and Millyseconds"))
+        }*/
+        if (ImGui::MenuItem("Configuration"))
         {
             showConfig = !showConfig;
-        }
-        if (ImGui::MenuItem("GUI Demo"))
-        {
-
         }
         ImGui::EndMenu();
     }
@@ -380,11 +396,12 @@ update_status ModuleEditor::Update(float dt)
                     if (ImGui::CollapsingHeader("Local Transformation"))
                     {
                         TransformC* trans = App->scene_intro->bigDaddy->childs.at(i)->transform;
-                        if (ImGui::SliderFloat3("Position", &trans->position, -10, 10))trans->updateTransform = true;
-                        if (ImGui::DragFloat("Rotation X", &trans->rotation.x, -20, 20)) trans->rotationX = true;
-                        if (ImGui::DragFloat("Rotation Y", &trans->rotation.y, -20, 20)) trans->rotationY = true;
-                        if (ImGui::DragFloat("Rotation Z", &trans->rotation.z, -20, 20)) trans->rotationZ = true;
-                        if (ImGui::SliderFloat3("Scale", &trans->scale, 1, 10))trans->updateTransform = true;
+                        if (ImGui::DragFloat3("Position", &trans->position,0.1f))trans->updateTransform = true;
+
+                        if (ImGui::DragFloat("Rotation X", &trans->rotation.x, 0.1f)) trans->rotationX = true;
+                        if (ImGui::DragFloat("Rotation Y", &trans->rotation.y, 0.1f)) trans->rotationY = true;
+                        if (ImGui::DragFloat("Rotation Z", &trans->rotation.z, 0.1f)) trans->rotationZ = true;
+                        if (ImGui::DragFloat3("Scale", &trans->scale, 0.1f))trans->updateTransform = true;
                     }
 					
 				}
@@ -404,7 +421,9 @@ update_status ModuleEditor::Update(float dt)
             App->camera->CenterToObject(selectedH);
     }
 
-
+    if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL)) {
+        LOG("Save state");
+    }
 
     return UPDATE_CONTINUE;
 }
