@@ -1,15 +1,6 @@
 #include "GameObject.h"
 
 ////////////////MESH////////////////////////
-MeshC::MeshC(GameObject* _owner, const char* fileName) : Component(_owner, ComponentType::MESH)
-{
-	VB = 0;
-	IB = 0;
-	numIndices = 0;
-
-	LoadMesh(fileName);
-
-}
 
 bool MeshC::LoadMesh(const char* fileName)
 {
@@ -168,7 +159,10 @@ GameObject::~GameObject()
 void GameObject::Update()
 {
 	transform->Update();
-	mesh->Update();
+	if (mesh!=nullptr)
+	{
+		mesh->Update();
+	}
 
 }
 void GameObject::Enable()

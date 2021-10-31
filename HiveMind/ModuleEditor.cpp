@@ -13,6 +13,8 @@
 #include <fstream>
 #include <string>
 
+#include <shellapi.h>
+
 extern std::list<std::string> logs;
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)

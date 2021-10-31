@@ -140,7 +140,14 @@ class MeshC : public Component
 {
 public:
 	MeshC(){}
-	MeshC(GameObject* _owner, const char* fileName);
+	MeshC(GameObject* _owner, const char* fileName) : Component(_owner, ComponentType::MESH)
+	{
+		VB = 0;
+		IB = 0;
+		numIndices = 0;
+
+		LoadMesh(fileName);
+	}
 	
 
 	~MeshC()
@@ -176,16 +183,16 @@ private:
 
 	const char* filePath;
 
-	GLuint meshTextureId;
-	GLuint texture;
-	GLuint textureId;
+	GLuint meshTextureId = NULL;
+	GLuint texture = NULL;
+	GLuint textureId = NULL;
 	uint CHECKERS_HEIGHT = 64;
 	uint CHECKERS_WIDTH = 64;
 	GLubyte checkerImage[64][64][4];
 
-	GLuint VB;
-	GLuint TB;
-	GLuint IB;
+	GLuint VB = NULL;
+	GLuint TB = NULL;
+	GLuint IB = NULL;
 	unsigned int numIndices;
 	unsigned int materialIndex;
 public:
