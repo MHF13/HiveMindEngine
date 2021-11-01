@@ -23,8 +23,8 @@ bool ModuleSceneIntro::Start()
 
 	bigDaddy = new GameObject("Scene", nullptr,NULL,NULL);
 	
-	//CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", NULL);
-	CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", "Assets/Textures/bakeHouse.png");
+	CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", NULL);
+	//CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", "Assets/Textures/bakeHouse.png");
 
 	
 	return ret;

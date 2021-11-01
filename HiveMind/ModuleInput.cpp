@@ -32,7 +32,9 @@ bool ModuleInput::Init()
 		ret = false;
 	}
 	
-
+	ilInit();
+	iluInit();
+	ilutInit();
 	return ret;
 }
 

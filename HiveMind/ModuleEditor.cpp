@@ -411,27 +411,32 @@ update_status ModuleEditor::Update(float dt)
 			{
 				if (App->sceneIntro->bigDaddy->childs.at(i) == selectedH)
 				{
+                    TransformC* trans = selectedH->transform;
+                    MeshC* mesh = selectedH->mesh;
+                    TextureC* texture = selectedH->texture;
+
                     if (ImGui::CollapsingHeader("Transform"))
                     {
-                        TransformC* trans = App->sceneIntro->bigDaddy->childs.at(i)->transform;
                         if (ImGui::DragFloat3("Position", &trans->position[0], 0.1f))trans->updateTransform = true;
                         if (ImGui::DragFloat3("Rotation", &trans->rotEuler[0], 0.1f))trans->updateTransform = true;
                         if (ImGui::DragFloat3("Scale", &trans->scale[0], 0.1f))trans->updateTransform = true;
                         if (ImGui::Button("Reset Transform"))
                             trans->ResetTransform();
                     }
-                    if (ImGui::CollapsingHeader("Mesh Component"))
+                    if (mesh != nullptr)
                     {
-                        MeshC* mesh = App->sceneIntro->bigDaddy->childs.at(i)->mesh;
-                        if (ImGui::Checkbox("Active", &mesh->active)) {}
-                    }
-                    if (ImGui::CollapsingHeader("Texture Component"))
-                    {
-                        TextureC* texture = App->sceneIntro->bigDaddy->childs.at(i)->texture;
-                        if (ImGui::Checkbox("Active", &texture->active)) {}
+                        if (ImGui::CollapsingHeader("Mesh Component")) {
+                            if (ImGui::Checkbox("Active", &mesh->active)) {}
+                        }
 
                     }
-					
+                    if (texture != nullptr)
+                    {
+                        if (ImGui::CollapsingHeader("Texture Component")) {
+                            if (ImGui::Checkbox("Active", &texture->active)) {}
+
+                        }
+                    }
 				}
 			}
 		}
