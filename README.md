@@ -1,8 +1,8 @@
-# LogyCar
+# HiveMind Engine
 
 ## Description
 
-Hive mind egine is a project from Mario Hernandez and Oriol Valverde, both studients from CITM university.
+HiveMind egine is a project from Mario Hernandez and Oriol Valverde, both studients from CITM university.
 
 ## Features:
 In our engine, you can create base forme as a cube, pyramid, sphere or cylinder. But if you want to use your own files, you can drag and drop them to your project.
