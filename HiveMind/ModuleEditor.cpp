@@ -192,7 +192,11 @@ update_status ModuleEditor::Update(float dt)
 
 
         }
+        if (ImGui::Button("Save"))    App->SaveConfigu();
+
+        if (ImGui::Button("Load"))    App->LoadConfigu();
         ImGui::End();
+
 		
     }
 
@@ -314,6 +318,18 @@ update_status ModuleEditor::Update(float dt)
             {
                 App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cube.fbx", NULL);
             }
+            if (ImGui::MenuItem("Sphere"))
+            {
+                App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/sphere.fbx", NULL);
+            }
+            if (ImGui::MenuItem("Cylinder"))
+            {
+                App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cylinder.fbx", NULL);
+            }
+            if (ImGui::MenuItem("Pyramid"))
+            {
+                App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/pyramid.fbx", NULL);
+            }
             ImGui::EndMenu();
         }
         //
@@ -395,7 +411,7 @@ update_status ModuleEditor::Update(float dt)
 			{
 				if (App->scene_intro->bigDaddy->childs.at(i) == selectedH)
 				{
-                    if (ImGui::CollapsingHeader("Local Transformation"))
+                    if (ImGui::CollapsingHeader("Transform"))
                     {
                         TransformC* trans = App->scene_intro->bigDaddy->childs.at(i)->transform;
                         if (ImGui::DragFloat3("Position", &trans->position[0], 0.1f))trans->updateTransform = true;
@@ -403,6 +419,17 @@ update_status ModuleEditor::Update(float dt)
                         if (ImGui::DragFloat3("Scale", &trans->scale[0], 0.1f))trans->updateTransform = true;
                         if (ImGui::Button("Reset Transform"))
                             trans->ResetTransform();
+                    }
+                    if (ImGui::CollapsingHeader("Mesh Component"))
+                    {
+                        MeshC* mesh = App->scene_intro->bigDaddy->childs.at(i)->mesh;
+                        if (ImGui::Checkbox("Active", &mesh->active)) {}
+                    }
+                    if (ImGui::CollapsingHeader("Texture Component"))
+                    {
+                        TextureC* texture = App->scene_intro->bigDaddy->childs.at(i)->texture;
+                        if (ImGui::Checkbox("Active", &texture->active)) {}
+
                     }
 					
 				}

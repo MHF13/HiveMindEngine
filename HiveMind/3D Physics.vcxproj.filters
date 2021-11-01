@@ -307,6 +307,9 @@
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Material.h" />
+    <ClInclude Include="ExternalLib\Parson\parson.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -475,6 +478,9 @@
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="ExternalLib\Parson\parson.c">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LogyCar.rc" />

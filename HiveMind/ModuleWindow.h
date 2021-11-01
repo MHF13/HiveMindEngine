@@ -31,6 +31,7 @@ public:
 
 	int width = 1080;
 	int height = 720;
+	
 	float brightness = 1;
 
 	bool fullScreen = false;

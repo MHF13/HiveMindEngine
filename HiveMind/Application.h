@@ -32,9 +32,9 @@ private:
 	float framerate;
 	float cappedMs = -1;
 
-	float FPS = 0;
+	float fPS = 0;
 
-	std::list<Module*> list_modules;
+	std::list<Module*> listModules;
 
 public:
 	int framerBlock;
@@ -45,6 +45,8 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+	void SaveConfigu();
+	void LoadConfigu();
 
 private:
 

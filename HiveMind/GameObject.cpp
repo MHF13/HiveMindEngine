@@ -17,7 +17,7 @@ void MeshC::Update()
 		glBindBuffer(GL_ARRAY_BUFFER, meshEnt[i].vertexB);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		if (tex != nullptr && tex->GetEnable() && owner->texture->GetEnable())
+		if (tex != nullptr && tex->GetEnable())
 		{
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
