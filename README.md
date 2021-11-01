@@ -2,7 +2,7 @@
 
 ## Description
 
-HiveMind egine is a project from Mario Hernandez and Oriol Valverde, both studients from CITM university.
+HiveMind engine is a project from Mario Hernandez and Oriol Valverde, both students from CITY university.
 
 ## Features:
 In our engine, you can create base forme as a cube, pyramid, sphere or cylinder. But if you want to use your own files, you can drag and drop them to your project.
@@ -17,7 +17,7 @@ You can transform position, rotation and scale your object with the inspector wi
 - Pressing “f” should focus the camera around the geometry.
 - Holding SHIFT duplicates movement speed.
 - Mouse wheel should zoom in and out
-- 
+
 ## GitHub
 - https://github.com/MHF13/HiveMindEngine
 
