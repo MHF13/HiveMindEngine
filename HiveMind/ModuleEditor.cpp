@@ -49,8 +49,6 @@ update_status ModuleEditor::Update(float dt)
     ImGui::NewFrame();
 
     //Config
-    
-    //if (showGuiDemo) ImGui::ShowDemoWindow(&showGuiDemo);
     if (showAboutWindow)
     {
         ImGui::Begin("About", &showAboutWindow);
@@ -99,7 +97,6 @@ update_status ModuleEditor::Update(float dt)
 
             ImGui::Text("Limit Framerate %d", App->framerBlock);
 
-            //ImGui::Text("Limit Framerate: %d", FPS);
 			RecolVector(&fps_log, columns, dt);
 
             sprintf_s(title, columns, "Framerate %.1f", fps_log[fps_log.size() - 1]);
@@ -109,9 +106,7 @@ update_status ModuleEditor::Update(float dt)
             sprintf_s(title, 25, "Milliseconds %.1f", Milliseconds_log[Milliseconds_log.size() - 1]);
             ImGui::PlotHistogram("##framerate", &Milliseconds_log[0], Milliseconds_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 
-
         }
-       // ImGui::End();
 		
         if (ImGui::CollapsingHeader("Window"))
         {
@@ -133,7 +128,6 @@ update_status ModuleEditor::Update(float dt)
                 if(ImGui::SliderInt("Height", &App->window->height, 300, 1080))
                     App->window->SetWindowModification();
 
-				//
 				if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
 					App->window->resizable = App->window->borderless = App->window->fullDesktop = false , App->window->SetWindowModification();
                 ImGui::SameLine();
@@ -150,10 +144,7 @@ update_status ModuleEditor::Update(float dt)
         }
         if (ImGui::CollapsingHeader("Hardware"))
         {
-            if (ImGui::Checkbox("Active", &hardwareActive))
-            {
-
-            }
+            if (ImGui::Checkbox("Active", &hardwareActive)) {}
             if (hardwareActive)
             {
                 SDL_version version;
@@ -185,115 +176,16 @@ update_status ModuleEditor::Update(float dt)
                 ImGui::SameLine();
                 ImGui::TextColored({ 255,255,0,1 }, "%s", glGetString(GL_RENDERER));
 
-                
             }
-
-
-
 
         }
         if (ImGui::Button("Save"))    App->SaveConfigu();
-
         if (ImGui::Button("Load"))    App->LoadConfigu();
         ImGui::End();
 
 		
     }
 
-
-
-    /*if (ImGui::BeginMenu("File"))
-    {
-        ImGui::MenuItem("(demo menu)", NULL, false, false);
-        if (ImGui::MenuItem("New"))
-        {
-
-        }
-        if (ImGui::MenuItem("Open", "Ctrl+O"))
-        {
-
-        }
-        if (ImGui::BeginMenu("Open Recent"))
-        {
-            ImGui::MenuItem("fish_hat.c");
-            ImGui::MenuItem("fish_hat.inl");
-            ImGui::MenuItem("fish_hat.h");
-            if (ImGui::BeginMenu("More.."))
-            {
-                ImGui::MenuItem("Hello");
-                ImGui::MenuItem("Sailor");
-                if (ImGui::BeginMenu("Recurse.."))
-                {
-                    // ShowExampleMenuFile();
-                    ImGui::EndMenu();
-                }
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenu();
-        }
-        if (ImGui::MenuItem("Save", "Ctrl+S"))
-        {
-
-        }
-        if (ImGui::MenuItem("Save As.."))
-        {
-
-        }
-
-        ImGui::Separator();
-        if (ImGui::BeginMenu("Options"))
-        {
-            static bool enabled = true;
-            ImGui::MenuItem("Enabled", "", &enabled);
-            ImGui::BeginChild("child", ImVec2(0, 60), true);
-            for (int i = 0; i < 10; i++)
-                ImGui::Text("Scrolling Text %d", i);
-            ImGui::EndChild();
-            static float f = 0.5f;
-            static int n = 0;
-            ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
-            ImGui::InputFloat("Input", &f, 0.1f);
-            ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
-            ImGui::EndMenu();
-        }
-
-        if (ImGui::BeginMenu("Colors"))
-        {
-            float sz = ImGui::GetTextLineHeight();
-            for (int i = 0; i < ImGuiCol_COUNT; i++)
-            {
-                const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
-                ImVec2 p = ImGui::GetCursorScreenPos();
-                ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
-                ImGui::Dummy(ImVec2(sz, sz));
-                ImGui::SameLine();
-                ImGui::MenuItem(name);
-            }
-            ImGui::EndMenu();
-        }
-
-        // Here we demonstrate appending again to the "Options" menu (which we already created above)
-        // Of course in this demo it is a little bit silly that this function calls BeginMenu("Options") twice.
-        // In a real code-base using it would make senses to use this feature from very different code locations.
-        if (ImGui::BeginMenu("Options")) // <-- Append!
-        {
-            static bool b = true;
-            ImGui::Checkbox("SomeOption", &b);
-            ImGui::EndMenu();
-        }
-
-        if (ImGui::BeginMenu("Disabled", false)) // Disabled
-        {
-            IM_ASSERT(0);
-        }
-        if (ImGui::MenuItem("Checked", NULL, true)) {}
-        if (ImGui::MenuItem("Quit", "Alt+F4")) { return update_status::UPDATE_STOP; }
-
-
-        ImGui::EndMenu();
-
-    }
-    */
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("File"))
     {
@@ -311,7 +203,6 @@ update_status ModuleEditor::Update(float dt)
         {
             App->sceneIntro->CreateObjectInScene("Empty object", App->sceneIntro->bigDaddy, NULL, NULL);
         }
-        //
         if (ImGui::BeginMenu("Primitives"))
         {
             if (ImGui::MenuItem("Cube"))
@@ -384,7 +275,6 @@ update_status ModuleEditor::Update(float dt)
     }
     ImGui::EndMainMenuBar();
 	
-	//LALA
 	if (console){
 		ImGui::Begin("Console", &console);
 		for (auto& a : logs)
@@ -445,7 +335,6 @@ update_status ModuleEditor::Update(float dt)
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-    //glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	//-----------------------------

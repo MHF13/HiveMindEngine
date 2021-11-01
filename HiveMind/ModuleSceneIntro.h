@@ -28,11 +28,7 @@ public:
 
 
 public:
-	//char* path;
 
 	GameObject* bigDaddy;
-
-	
-
 
 };

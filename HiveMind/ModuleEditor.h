@@ -39,19 +39,18 @@ private:
 	std::vector<float> Milliseconds_log;
 	int columns;
 
-	///////////bools checkbox
+	// bools checkbox
 	bool windowActive = true;
 	bool hardwareActive = true;
 
 
-	/////WINDOWS
-
+	// WINDOWS
 	bool hierarchy = true;
 	GameObject* selectedH = nullptr;
 
 	bool inspector = true;
 
-	//Console
+	// Console
 	bool console = true;
 
 	

@@ -1,7 +1,118 @@
 #include "GameObject.h"
 
-////////////////MESH////////////////////////
+////////////////COMPONENT///////////////
+Component* GameObject::GetAllComponents(ComponentType type)
+{
+	for (size_t i = 0; i < components.size(); i++)
+		if (components.at(i)->type == type)
+			return components.at(i);
 
+	return nullptr;
+}
+
+// -----------------------------------------------------------------
+Component* GameObject::GetComponent(ComponentType _type)
+{
+	for (size_t i = 0; i < components.size(); i++)
+		if (components.at(i)->type == _type)
+			return components.at(i);
+
+	return nullptr;
+}
+
+////////////////GAMEOBJECT///////////////
+GameObject::GameObject(const char* _name, GameObject* _parent, const char* filePath, const char* materialPath)
+{
+	name = _name;
+	parent = _parent;
+	active = true;
+	if (parent != nullptr)
+	{
+		parent->childs.push_back(this);
+	}
+	if (_parent != nullptr)
+	{
+		AddComponent(ComponentType::TRANSFORM);
+		if (filePath != NULL)
+			AddComponent(ComponentType::MESH, filePath);
+		if (materialPath != NULL)
+			AddComponent(ComponentType::TEXTURE, materialPath);
+	}
+
+}
+
+// -----------------------------------------------------------------
+GameObject::~GameObject()
+{
+}
+
+// -----------------------------------------------------------------
+void GameObject::Update()
+{
+	for (int i = 0; i < components.size(); i++)
+	{
+		if (components.at(i)->GetEnable())
+		{
+			components.at(i)->Update();
+		}
+	}
+
+}
+
+// -----------------------------------------------------------------
+void GameObject::AddComponent(ComponentType type, const char* fileName)
+{
+	switch (type)
+	{
+	case ComponentType::NONE:
+		break;
+	case ComponentType::TRANSFORM:
+		transform = new TransformC(this);
+		components.push_back(transform);
+		LOG("Tansform Component added");
+		break;
+	case ComponentType::MESH:
+		mesh = new MeshC(this, fileName);
+		components.push_back(mesh);
+		LOG("Mesh Component added: %s",fileName);
+
+		break;
+	case ComponentType::TEXTURE:
+		texture = new TextureC(this, fileName);
+		components.push_back(texture);
+		LOG("Texture Component added: %s", fileName);
+		break;
+	default:
+		break;
+	}
+
+}
+
+// -----------------------------------------------------------------
+void GameObject::RemoveComponent(ComponentType type)
+{
+	switch (type)
+	{
+	case ComponentType::NONE:
+		break;
+	case ComponentType::TRANSFORM:
+		transform->SetEnable(false);
+		transform = nullptr;
+		break;
+	case ComponentType::MESH:
+		transform->SetEnable(false);
+		transform = nullptr;
+		break;
+	case ComponentType::TEXTURE:
+		transform->SetEnable(false);
+		transform = nullptr;
+		break;
+	default:
+		break;
+	}
+}
+
+////////////////MESH////////////////////////
 void MeshC::Update()
 {
 	TransformC* t = owner->transform;
@@ -17,7 +128,7 @@ void MeshC::Update()
 		glBindBuffer(GL_ARRAY_BUFFER, meshEnt[i].vertexB);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		if (tex != nullptr /* && tex->GetEnable()*/)
+		if (tex != nullptr && tex->GetEnable())
 		{
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -35,6 +146,7 @@ void MeshC::Update()
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshEnt[i].indexB);
 
+		if (tex != nullptr && tex->GetEnable())
 		const unsigned int MaterialIndex = meshEnt[i].materialIndx;
 
 		glDrawElements(GL_TRIANGLES, meshEnt[i].numIndx, GL_UNSIGNED_INT, NULL);
@@ -52,6 +164,7 @@ void MeshC::Update()
 	glPopMatrix();
 }
 
+// -----------------------------------------------------------------
 bool MeshC::LoadMesh(const char* fileName)
 {
 
@@ -75,6 +188,7 @@ bool MeshC::LoadMesh(const char* fileName)
 	return ret;
 }
 
+// -----------------------------------------------------------------
 void MeshC::Buffers(const std::vector<vec3>& vertex, const std::vector<vec2>& textureC, const std::vector<vec3>& normals, const std::vector<unsigned int>& index)
 {
 	numIndx = index.size();
@@ -99,9 +213,9 @@ void MeshC::Buffers(const std::vector<vec3>& vertex, const std::vector<vec2>& te
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * index.size(), &index[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	LOG("All buffers Ready!");
 }
 
+// -----------------------------------------------------------------
 void MeshC::Init(unsigned int index, const aiMesh* paiMesh)
 {
 	meshEnt[index].materialIndx = paiMesh->mMaterialIndex;
@@ -135,90 +249,7 @@ void MeshC::Init(unsigned int index, const aiMesh* paiMesh)
 	meshEnt[index].Buffers(vertices, texCoords, normals, indices);
 }
 
-////////////////GAMEOBJECT///////////////
-GameObject::GameObject(const char* _name, GameObject* _parent, const char* filePath, const char* materialPath)
-{
-	name = _name;
-	parent = _parent;
-	active = true;
-	if (parent != nullptr)
-	{
-		parent->childs.push_back(this);
-	}
-	if(_parent != nullptr)
-	{
-		AddComponent(ComponentType::TRANSFORM);
-		if (filePath != NULL)
-			AddComponent(ComponentType::MESH, filePath);
-		if (materialPath != NULL)    
-			AddComponent(ComponentType::TEXTURE, materialPath);
-	}
-	
-}
-
-GameObject::~GameObject()
-{
-}
-void GameObject::Update()
-{
-	for (int i = 0; i < components.size(); i++)
-	{
-		if (components.at(i)->GetEnable())
-		{
-			components.at(i)->Update();
-		}
-	}
-
-}
-
-void GameObject::AddComponent(ComponentType type, const char* fileName)
-{
-	if (type == ComponentType::TRANSFORM)
-	{
-		transform = new TransformC(this);
-		components.push_back(transform);
-	}
-	if (type == ComponentType::MESH)
-	{
-		mesh = new MeshC(this, fileName);
-		components.push_back(mesh);
-
-	}
-	if (type == ComponentType::TEXTURE)
-	{
-		texture = new TextureC(this, fileName);
-		components.push_back(texture);
-	}
-
-}
-
-void GameObject::RemoveComponent(ComponentType type)
-{
-
-}
-Component* GameObject::GetAllComponents(ComponentType type)
-{
-	for (size_t i = 0; i < components.size(); i++)
-		if (components.at(i)->type == type)
-			return components.at(i);
-		
-	
-
-	return nullptr;
-
-}
-
-Component* GameObject::GetComponent(ComponentType _type)
-{
-	for (size_t i = 0; i < components.size(); i++)
-		if (components.at(i)->type == _type)
-			return components.at(i);
-		
-	
-
-	return nullptr;
-}
-
+////////////////TEXTURE///////////////
 void TextureC::LoadTexture(const char* Path)
 {
 	MeshC* renderMesh = owner->mesh;
@@ -248,6 +279,5 @@ void TextureC::LoadTexture(const char* Path)
 		heightTex = ilGetInteger(IL_IMAGE_HEIGHT);
 		texture = renderMesh->textureId;
 	}
-
 }
 

@@ -23,10 +23,9 @@ bool ModuleSceneIntro::Start()
 
 	bigDaddy = new GameObject("Scene", nullptr,NULL,NULL);
 	
-	CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", NULL);
-	//CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", "Assets/Textures/bakeHouse.png");
+	//CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", NULL);
+	CreateObjectInScene("BakerHouse", bigDaddy, "Assets/Models/BakerHouse.fbx", "Assets/Textures/bakeHouse.png");
 
-	
 	return ret;
 }
 
@@ -56,19 +55,10 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = true;
 	p.Render();
 
-	/*Primitive::Cube s(1, 10, 20);
-	s.Render();*/
-
-	//MeshC fish("Assets/Models/BakerHouse.fbx");
-	//fish.Render();
-
-	//LALA
 	for (int i = 0; i < bigDaddy->childs.size(); i++)
 	{
 		bigDaddy->childs.at(i)->Update();
-
 	}
-
 
 	return UPDATE_CONTINUE;
 }

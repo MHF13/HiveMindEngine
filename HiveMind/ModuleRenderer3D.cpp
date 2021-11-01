@@ -117,22 +117,6 @@ bool ModuleRenderer3D::Init()
 	// Projection matrix for
 	OnResize(App->window->width, App->window->height);
 
-	//OGL Vertex arrays
-
-	//TODO
-	/*
-	glGenBuffers(1, (GLuint*)&(my_id));
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	vertices = { 0.0f,0.0f,0.0f,
-				1.0f, 0.0f, 0.0f,
-				0.0f,1.0f,0.0f,
-				1.0f, 0.0f, 0.0f,
-				1.0f,1.0f,0.0f,
-				0.0f,1.0f,0.0f};
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size() * 3, &vertices[0], GL_STATIC_DRAW);
-	*/
-	
-
 	return ret;
 }
 

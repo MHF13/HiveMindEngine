@@ -300,9 +300,6 @@
     <ClInclude Include="ExternalLib\Glew\include\GL\wglew.h">
       <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
-    <ClInclude Include="ManagerGameObject.h">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClInclude>
@@ -470,9 +467,6 @@
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ManagerGameObject.cpp">
-      <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources\Modules\GameObjects</Filter>

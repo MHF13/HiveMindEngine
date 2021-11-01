@@ -10,7 +10,6 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	editor = new ModuleEditor(this);
-	moduleGameObject = new ManagerGameObject(this);
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -19,7 +18,6 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(moduleGameObject);
 
 	// Scenes
 	AddModule(sceneIntro);
@@ -146,7 +144,6 @@ void Application::SaveConfigu()
 
 	
 	json_object_set_number(json_object(file), "maxfps", fPS);
-	//json_object_set_number(json_object(file), "frameBlock", framerBlock);
 	json_object_dotset_number(json_object(file), "brightness", window->brightness);
 	json_object_dotset_number(json_object(file), "width", window->width);
 	json_object_dotset_number(json_object(file), "height", window->height);
@@ -180,7 +177,6 @@ void Application::LoadConfigu()
 		JSON_Object* object = json_value_get_object(root);
 		
 		fPS = (float)json_object_get_number(object, "maxfps");
-		//framerBlock = (int)json_object_get_number(object, "framerBlock");
 
 		window->brightness = (float)json_object_dotget_number(object, "brightness");
 		window->width = (float)json_object_dotget_number(json_object(root), "width");

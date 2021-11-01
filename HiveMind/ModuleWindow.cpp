@@ -60,7 +60,7 @@ bool ModuleWindow::Init()
 		}
 
 		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
-		SetTitle("Hive Mind Engine");
+		SetTitle("HiveMind Engine");
 
 		if(window == NULL)
 		{

@@ -8,7 +8,6 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-#include "ManagerGameObject.h"
 #include "ModuleEditor.h"
 #include <list>
 
@@ -21,7 +20,6 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
-	ManagerGameObject* moduleGameObject;
 
 private:
 
