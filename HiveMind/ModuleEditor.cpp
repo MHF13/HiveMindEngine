@@ -309,26 +309,26 @@ update_status ModuleEditor::Update(float dt)
     {
         if (ImGui::MenuItem("Create Empty"))
         {
-            App->scene_intro->CreateObjectInScene("Empty object", App->scene_intro->bigDaddy, NULL, NULL);
+            App->sceneIntro->CreateObjectInScene("Empty object", App->sceneIntro->bigDaddy, NULL, NULL);
         }
         //
         if (ImGui::BeginMenu("Primitives"))
         {
             if (ImGui::MenuItem("Cube"))
             {
-                App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cube.fbx", NULL);
+                App->sceneIntro->CreateObjectInScene("Cube", App->sceneIntro->bigDaddy, "Assets/Models/cube.fbx", NULL);
             }
             if (ImGui::MenuItem("Sphere"))
             {
-                App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/sphere.fbx", NULL);
+                App->sceneIntro->CreateObjectInScene("Cube", App->sceneIntro->bigDaddy, "Assets/Models/sphere.fbx", NULL);
             }
             if (ImGui::MenuItem("Cylinder"))
             {
-                App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/cylinder.fbx", NULL);
+                App->sceneIntro->CreateObjectInScene("Cube", App->sceneIntro->bigDaddy, "Assets/Models/cylinder.fbx", NULL);
             }
             if (ImGui::MenuItem("Pyramid"))
             {
-                App->scene_intro->CreateObjectInScene("Cube", App->scene_intro->bigDaddy, "Assets/Models/pyramid.fbx", NULL);
+                App->sceneIntro->CreateObjectInScene("Cube", App->sceneIntro->bigDaddy, "Assets/Models/pyramid.fbx", NULL);
             }
             ImGui::EndMenu();
         }
@@ -396,24 +396,24 @@ update_status ModuleEditor::Update(float dt)
 	if (hierarchy)
 	{
 		ImGui::Begin("Herarchy", &hierarchy);
-		if (App->scene_intro->bigDaddy != nullptr)
+		if (App->sceneIntro->bigDaddy != nullptr)
 		{
-			HierarchyList(App->scene_intro->bigDaddy);
+			HierarchyList(App->sceneIntro->bigDaddy);
 		}
 		ImGui::End();
 	}
 	if (inspector)
 	{
 		ImGui::Begin("Inspector", &inspector);
-		if (App->scene_intro->bigDaddy != nullptr)
+		if (App->sceneIntro->bigDaddy != nullptr)
 		{
-			for (int i = 0; i < App->scene_intro->bigDaddy->childs.size(); ++i)
+			for (int i = 0; i < App->sceneIntro->bigDaddy->childs.size(); ++i)
 			{
-				if (App->scene_intro->bigDaddy->childs.at(i) == selectedH)
+				if (App->sceneIntro->bigDaddy->childs.at(i) == selectedH)
 				{
                     if (ImGui::CollapsingHeader("Transform"))
                     {
-                        TransformC* trans = App->scene_intro->bigDaddy->childs.at(i)->transform;
+                        TransformC* trans = App->sceneIntro->bigDaddy->childs.at(i)->transform;
                         if (ImGui::DragFloat3("Position", &trans->position[0], 0.1f))trans->updateTransform = true;
                         if (ImGui::DragFloat3("Rotation", &trans->rotEuler[0], 0.1f))trans->updateTransform = true;
                         if (ImGui::DragFloat3("Scale", &trans->scale[0], 0.1f))trans->updateTransform = true;
@@ -422,12 +422,12 @@ update_status ModuleEditor::Update(float dt)
                     }
                     if (ImGui::CollapsingHeader("Mesh Component"))
                     {
-                        MeshC* mesh = App->scene_intro->bigDaddy->childs.at(i)->mesh;
+                        MeshC* mesh = App->sceneIntro->bigDaddy->childs.at(i)->mesh;
                         if (ImGui::Checkbox("Active", &mesh->active)) {}
                     }
                     if (ImGui::CollapsingHeader("Texture Component"))
                     {
-                        TextureC* texture = App->scene_intro->bigDaddy->childs.at(i)->texture;
+                        TextureC* texture = App->sceneIntro->bigDaddy->childs.at(i)->texture;
                         if (ImGui::Checkbox("Active", &texture->active)) {}
 
                     }
@@ -445,7 +445,7 @@ update_status ModuleEditor::Update(float dt)
 
 	//-----------------------------
     if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {
-        if (selectedH != nullptr && selectedH != App->scene_intro->bigDaddy)
+        if (selectedH != nullptr && selectedH != App->sceneIntro->bigDaddy)
             App->camera->CenterToObject(selectedH);
     }
 

@@ -232,9 +232,9 @@ public:
 	bool active = false;
 
 	std::vector<Component*> components;
-	TransformC* transform; 
-	MeshC* mesh;
-	TextureC* texture;
+	TransformC* transform = nullptr;
+	MeshC* mesh = nullptr;
+	TextureC* texture = nullptr;
 
 	GameObject* parent; 
 	std::vector<GameObject*> childs; 

@@ -16,6 +16,11 @@ public:
 
 	void UpdateInspector(GameObject* go);
 
+	GameObject* GetSelected() 
+	{
+		return selectedH;
+	}
+
 private:
 
 	void RecolVector(std::vector<float>* vec, int size, float dt);

@@ -110,15 +110,22 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_DROPFILE:
-				dropped_filedir = e.drop.file;
-				if (dropped_filedir != nullptr)
+				droppedFiledir = e.drop.file;
+				if (droppedFiledir != nullptr)
 				{
-					GameObject* dropped = App->scene_intro->CreateObjectInScene("dropped", App->scene_intro->bigDaddy, dropped_filedir,NULL);
-					LOG("New object create with drag and drop function");
+					if (ilLoadImage(droppedFiledir))
+					{
+						GameObject* a = App->editor->GetSelected();
+						if(a != NULL)	a->AddComponent(ComponentType::TEXTURE,droppedFiledir);
+					}
+					else {
+						GameObject* dropped = App->sceneIntro->CreateObjectInScene("dropped", App->sceneIntro->bigDaddy, droppedFiledir,NULL);
+						LOG("New object create with drag and drop function");
+					}
 				}
 				// Shows directory of dropped file
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"File dropped on window",dropped_filedir,App->window->window);
-				SDL_free(dropped_filedir);
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"File dropped on window", droppedFiledir,App->window->window);
+				SDL_free(droppedFiledir);
 
 				break;
 
