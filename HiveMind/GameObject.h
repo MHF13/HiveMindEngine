@@ -60,7 +60,6 @@ public:
 	}
 
 	virtual void Update() {};
-
 	virtual void Draw() {};
 
 	virtual bool  GetEnable() { return active; }
@@ -145,12 +144,11 @@ public:
 	{
 		vertexB = 0;
 		indexB = 0;
-		numIndices = 0;
+		numIndx = 0;
 
 		LoadMesh(fileName);
 	}
 	
-
 	~MeshC()
 	{
 		if (vertexB != 0)
@@ -164,39 +162,28 @@ public:
 		}
 		//Clear();
 	}
-	void Update() override {
-		if (active)
-			Render();
+	void Update() override;
 
-	};
-
-	void Draw() override {};
 	bool LoadMesh(const char* fileName);
-	void Render();
-
 
 private:
-	void InitFromScene(const aiScene* pScene, const char* fileName);
-	void InitMesh(unsigned int Index, const aiMesh* paiMesh);
-	void Clear();
-	void Init(const std::vector<float3>& Vertices, const std::vector<float2>& textCord,
-		const std::vector<unsigned int>& Indices);
+	//void InitFromScene(unsigned int index, const aiMesh* aiMesh);
+	void Init(unsigned int index, const aiMesh* aiMesh);
+	void Buffers(const std::vector<vec3>& vertex, const std::vector<vec2>& textureC, const std::vector<vec3>& normals, const std::vector<unsigned int>& index);
 
-	const char* filePath;
+private:
+	uint materialIndx = 0;
+	std::vector<MeshC> meshEnt;
+	std::vector<const aiMesh*> meshes;
 
+public:
 
+	GLuint textureId = NULL;
 	GLuint vertexB = NULL;
 	GLuint textureB = NULL;
 	GLuint indexB = NULL;
-	unsigned int numIndices;
-	unsigned int materialIndex;
-public:
-	
-	uint numVertex = 0;
-	std::vector<float3> vertices;
-
-	std::vector<MeshC> mEntries;
-	std::vector<const aiMesh*> activeMeshes;
+	GLuint normalB = NULL;
+	uint numIndx = 0;
 
 };
 
@@ -214,12 +201,10 @@ public:
 	}
 
 	~TextureC() {}
-	//void Update() override {};
 
 	void LoadTexture(const char* texturePath);
 
-
-	GLuint textureId = NULL;
+	GLuint texture = NULL;
 	GLuint widthTex;
 	GLuint heightTex;
 private:
@@ -234,11 +219,8 @@ public:
 
 	void Update();
 
-	bool GetEnable() { return enabled; };
-
-	void Enable();
-	void Disable();
-	void CleanUp();
+	virtual bool  GetEnable() { return active; }
+	virtual void  SetEnable(bool state) { active = state; }
 
 	void AddComponent(ComponentType type, const char* fileName = "");
 	void RemoveComponent(ComponentType type);
@@ -247,7 +229,7 @@ public:
 	Component* GetComponent(ComponentType _type);
 
 public:
-	bool enabled = false;
+	bool active = false;
 
 	std::vector<Component*> components;
 	TransformC* transform; 
