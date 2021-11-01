@@ -32,7 +32,7 @@
 #pragma comment (lib, "ILU.lib") 
 #pragma comment (lib, "ILUT.lib")
 
-////////
+
 class GameObject;
 
 enum class ComponentType
@@ -63,8 +63,8 @@ public:
 
 	virtual void Draw() {};
 
-	virtual void Enable() { active = true; }
-	virtual void Disable() { active = false; }
+	virtual bool  GetEnable() { return active; }
+	virtual void  SetEnable(bool state) { active = state; }
 	virtual void Destroy() {  }
 
 
@@ -78,6 +78,7 @@ public:
 
 class TransformC : public Component {
 public:
+	TransformC(){}
 	TransformC(GameObject* _owner) : Component(_owner, ComponentType::TRANSFORM) {
 
 		transform.SetIdentity();
@@ -142,8 +143,8 @@ public:
 	MeshC(){}
 	MeshC(GameObject* _owner, const char* fileName) : Component(_owner, ComponentType::MESH)
 	{
-		VB = 0;
-		IB = 0;
+		vertexB = 0;
+		indexB = 0;
 		numIndices = 0;
 
 		LoadMesh(fileName);
@@ -152,14 +153,14 @@ public:
 
 	~MeshC()
 	{
-		if (VB != 0)
+		if (vertexB != 0)
 		{
-			glDeleteBuffers(1, &VB);
+			glDeleteBuffers(1, &vertexB);
 		}
 
-		if (IB != 0)
+		if (indexB != 0)
 		{
-			glDeleteBuffers(1, &IB);
+			glDeleteBuffers(1, &indexB);
 		}
 		//Clear();
 	}
@@ -183,19 +184,14 @@ private:
 
 	const char* filePath;
 
-	GLuint meshTextureId = NULL;
-	GLuint texture = NULL;
-	GLuint textureId = NULL;
-	uint CHECKERS_HEIGHT = 64;
-	uint CHECKERS_WIDTH = 64;
-	GLubyte checkerImage[64][64][4];
 
-	GLuint VB = NULL;
-	GLuint TB = NULL;
-	GLuint IB = NULL;
+	GLuint vertexB = NULL;
+	GLuint textureB = NULL;
+	GLuint indexB = NULL;
 	unsigned int numIndices;
 	unsigned int materialIndex;
 public:
+	
 	uint numVertex = 0;
 	std::vector<float3> vertices;
 
@@ -220,45 +216,13 @@ public:
 	~TextureC() {}
 	//void Update() override {};
 
-	void LoadTexture(const char* texturePath)
-	{
-		/*for (int i = 0; i < 64; i++) {
-			for (int j = 0; j < 64; j++) {
-				int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-				checkerImage[i][j][0] = (GLubyte)c;
-				checkerImage[i][j][1] = (GLubyte)c;
-				checkerImage[i][j][2] = (GLubyte)c;
-				checkerImage[i][j][3] = (GLubyte)255;
-			}
-		}*/
-	
-		ILuint imageId;
-		bool load = ilLoadImage(texturePath);
-		ilGenImages(1, &imageId);
-		ilBindImage(imageId);
-		if (load)
-		{
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glGenTextures(1, &textureId);
-			glBindTexture(GL_TEXTURE_2D, textureId);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
-				0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-			glGenerateMipmap(GL_TEXTURE_2D);
-			LOG("Texture Loaded");
-		}
+	void LoadTexture(const char* texturePath);
 
-	}
 
+	GLuint textureId = NULL;
+	GLuint widthTex;
+	GLuint heightTex;
 private:
-	GLuint textureId;
-	GLubyte checkerImage[64][64][4];
-
-	//std::vector<TextureC> textures;
-
 };
 
 class GameObject

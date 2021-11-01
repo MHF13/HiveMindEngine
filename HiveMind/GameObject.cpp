@@ -21,6 +21,7 @@ bool MeshC::LoadMesh(const char* fileName)
 	}
 	return ret;
 }
+
 void MeshC::InitFromScene(const aiScene* pScene, const char* fileName)
 {
 	mEntries.resize(pScene->mNumMeshes);
@@ -38,16 +39,16 @@ void MeshC::Init(const std::vector<float3>& Vertices, const std::vector<float2>&
 {
 	numIndices = Indices.size();
 
-	glGenBuffers(1, &VB);
-	glBindBuffer(GL_ARRAY_BUFFER, VB);
+	glGenBuffers(1, &vertexB);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexB);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * Vertices.size(), &Vertices[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &TB);
-	glBindBuffer(GL_ARRAY_BUFFER, TB);
+	glGenBuffers(1, &textureB);
+	glBindBuffer(GL_ARRAY_BUFFER, textureB);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * Vertices.size(), &Vertices[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &IB);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
+	glGenBuffers(1, &indexB);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexB);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * numIndices, &Indices[0], GL_STATIC_DRAW);
 
 	struct aiLogStream stream;
@@ -85,6 +86,7 @@ void MeshC::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 
 	mEntries[Index].Init(Vertices, texCord, Indices);
 }
+
 void MeshC::Render()
 {
 	TransformC* t = new TransformC(nullptr);
@@ -93,21 +95,26 @@ void MeshC::Render()
 	glMultMatrixf(t->GetGlobalTransform());
 	//glMultMatrixf(t->transform.M);
 
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	TextureC* tex = new TextureC();
+	tex = dynamic_cast<TextureC*>(owner->GetComponent(ComponentType::TEXTURE));
+	if (tex != nullptr)
+	{
+		glBindTexture(GL_TEXTURE_2D, owner->texture->textureId);
+	}
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
 	for (unsigned int i = 0; i < mEntries.size(); i++) {
-		glBindBuffer(GL_ARRAY_BUFFER, mEntries[i].VB);
+		glBindBuffer(GL_ARRAY_BUFFER, mEntries[i].vertexB);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float3), 0);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float3), (const GLvoid*)12);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float3), (const GLvoid*)20);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].TB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].VB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].IB);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].textureB);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].vertexB);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEntries[i].indexB);
 
 		const unsigned int MaterialIndex = mEntries[i].materialIndex;
 
@@ -125,7 +132,6 @@ void MeshC::Render()
 	glDisableVertexAttribArray(2);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-
 }
 
 void MeshC::Clear()
@@ -158,10 +164,12 @@ GameObject::~GameObject()
 }
 void GameObject::Update()
 {
-	transform->Update();
-	if (mesh!=nullptr)
+	for (int i = 0; i < components.size(); i++)
 	{
-		mesh->Update();
+		if (components.at(i)->active)
+		{
+			components.at(i)->Update();
+		}
 	}
 
 }
@@ -231,5 +239,39 @@ Component* GameObject::GetComponent(ComponentType _type)
 	}
 
 	return nullptr;
+}
+
+void TextureC::LoadTexture(const char* texturePath)
+{
+	//MeshC* renderMesh = new MeshC(*dynamic_cast<MeshC*>(owner->GetComponent(ComponentType::MESH)));
+	GameObject* theOwner = owner;
+
+	MeshC* renderMesh = theOwner->mesh;
+
+	ILuint imageId;
+	ilGenImages(1, &imageId);
+	ilBindImage(imageId);
+	if (ilLoadImage(texturePath))
+	{
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		textureId = ilutGLBindTexImage();
+		glBindTexture(GL_TEXTURE_2D, textureId);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glBindTexture(GL_TEXTURE_2D, NULL);
+
+		ilDeleteImages(1, &imageId);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		LOG("Texture Loaded");
+	}
+
+
 }
 
