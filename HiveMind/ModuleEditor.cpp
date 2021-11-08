@@ -305,6 +305,10 @@ update_status ModuleEditor::Update(float dt)
                     MeshC* mesh = selectedH->mesh;
                     TextureC* texture = selectedH->texture;
 
+
+
+                    ImGui::InputText("",selectedH->name.,ARRAYSIZE(selectedH->name));
+
                     if (ImGui::CollapsingHeader("Transform"))
                     {
                         if (ImGui::DragFloat3("Position", &trans->position[0], 0.1f))trans->updateTransform = true;
@@ -316,14 +320,14 @@ update_status ModuleEditor::Update(float dt)
                     if (mesh != nullptr)
                     {
                         if (ImGui::CollapsingHeader("Mesh Component")) {
-                            if (ImGui::Checkbox("Active", &mesh->active)) {}
+                            if (ImGui::Checkbox("Active Mesh", &mesh->active)) {}
                         }
 
                     }
                     if (texture != nullptr)
                     {
                         if (ImGui::CollapsingHeader("Texture Component")) {
-                            if (ImGui::Checkbox("Active", &texture->active)) {}
+                            if (ImGui::Checkbox("Active Texture", &texture->active)) {}
 
                         }
                     }
@@ -397,7 +401,8 @@ void ModuleEditor::HierarchyList(GameObject* list)
 	{
 		parent |= ImGuiTreeNodeFlags_Selected;
 	}
-	bool openTreenNode = ImGui::TreeNodeEx(list->name, parent);
+	bool openTreenNode = ImGui::TreeNodeEx(list->name,parent);
+	//bool openTreenNode = ImGui::TreeNodeEx(list->name, parent);
 	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left))
 	{
 		selectedH = list;

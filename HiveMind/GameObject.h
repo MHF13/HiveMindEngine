@@ -238,6 +238,6 @@ public:
 
 	GameObject* parent; 
 	std::vector<GameObject*> childs; 
-	const char* name;
+	std::string name;
 
 };
